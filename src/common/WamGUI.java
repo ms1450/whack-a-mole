@@ -8,6 +8,7 @@ public class WamGUI extends Application implements Observer<WAMBoard> {
 
     @Override
     public void start(Stage stage) throws Exception {
+
     }
 
     public static void main(String[] args){
