@@ -1,5 +1,6 @@
 package client.gui;
 
 public class WAMBoard {
-    System.out.println("Hello");
+    public void error(String arguments) {
+    }
 }
