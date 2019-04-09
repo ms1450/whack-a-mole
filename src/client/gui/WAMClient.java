@@ -99,7 +99,7 @@ public class WAMClient {
         this.board.close();
     }
 
-//    private void run() {
+    private void run() {
 //        while (this.goodToGo()) {
 //            try {
 //                String request = this.networkIn.next();
@@ -146,4 +146,4 @@ public class WAMClient {
 //    }
 
 
-}
+}}
