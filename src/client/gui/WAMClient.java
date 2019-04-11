@@ -53,7 +53,7 @@ public class WAMClient {
             // Block waiting for the CONNECT message from the server.
             String request = this.networkIn.next();
             String arguments = this.networkIn.nextLine();
-            if (!request.equals(WELCOME)) {
+            if (!request.equals(WAMProtocol.WELCOME)) {
                 throw new WAMException("Expected WELCOME from server");
             }
             WAMClient.dPrint("Connected to server " + this.clientSocket);
@@ -89,6 +89,38 @@ public class WAMClient {
         this.stop();
     }
 
+    public void moleUp(String args){
+        String[] val = args.trim().split(" ");
+        int holeNo = Integer.parseInt(val[0]);
+        this.board.holeUp(holeNo);
+    }
+
+    public void moleDown(String args){
+        String[] val = args.trim().split(" ");
+        int holeNo = Integer.parseInt(val[0]);
+        this.board.holeDown(holeNo);
+    }
+
+    public void scoresUpdate(String args){
+        String[] val = args.trim().split(" ");
+        int[] scores = new int[val.length-1];
+        int i = 0;
+        for(String s:val) {
+            scores[i] = Integer.parseInt(s);
+            i++;
+        }
+        this.board.updateScore(scores);
+    }
+
+    public void createBoard(String args){
+        String[] fields = args.trim().split( " " );
+        int row = Integer.parseInt(fields[0]);
+        int column = Integer.parseInt(fields[1]);
+        int players = Integer.parseInt(fields[2]);
+        int playerNo = Integer.parseInt(fields[3]);
+        this.board.initializeTheBoard(row,column,players,playerNo);
+    }
+
     public void close() {
         try {
             this.clientSocket.close();
@@ -100,50 +132,52 @@ public class WAMClient {
     }
 
     private void run() {
-//        while (this.goodToGo()) {
-//            try {
-//                String request = this.networkIn.next();
-//                String arguments = this.networkIn.nextLine().trim();
-//                ConnectFourNetworkClient.dPrint( "Net message in = \"" + request + '"' );
-//
-//                switch ( request ) {
-//                    case MAKE_MOVE:
-//                        makeMove();
-//                        break;
-//                    case MOVE_MADE:
-//                        moveMade( arguments );
-//                        break;
-//                    case GAME_WON:
-//                        gameWon();
-//                        break;
-//                    case GAME_LOST:
-//                        gameLost();
-//                        break;
-//                    case GAME_TIED:
-//                        gameTied();
-//                        break;
-//                    case ERROR:
-//                        error( arguments );
-//                        break;
-//                    default:
-//                        System.err.println("Unrecognized request: " + request);
-//                        this.stop();
-//                        break;
-//                }
-//            }
-//            catch( NoSuchElementException nse ) {
-//                // Looks like the connection shut down.
-//                this.error( "Lost connection to server." );
-//                this.stop();
-//            }
-//            catch( Exception e ) {
-//                this.error( e.getMessage() + '?' );
-//                this.stop();
-//            }
-//        }
-//        this.close();
-//    }
-//    }
-
-
-}}
+        while (this.goodToGo()) {
+            try {
+                String request = this.networkIn.next();
+                String arguments = this.networkIn.nextLine().trim();
+                WAMClient.dPrint( "Net message in = \"" + request + '"' );
+                switch ( request ) {
+                    case WELCOME:
+                        createBoard(arguments);
+                        break;
+                    case SCORE:
+                        scoresUpdate(arguments);
+                        break;
+                    case MOLE_UP:
+                        moleUp(arguments);
+                        break;
+                    case MOLE_DOWN:
+                        moleDown( arguments );
+                        break;
+                    case GAME_WON:
+                        gameWon();
+                        break;
+                    case GAME_LOST:
+                        gameLost();
+                        break;
+                    case GAME_TIED:
+                        gameTied();
+                        break;
+                    case ERROR:
+                        error( arguments );
+                        break;
+                    default:
+                        System.err.println("Unrecognized request: " + request);
+                        this.stop();
+                        break;
+                }
+            }
+            catch( NoSuchElementException nse ) {
+                // Looks like the connection shut down.
+                this.error( "Lost connection to server." );
+                this.stop();
+            }
+            catch( Exception e ) {
+                this.error( e.getMessage() + '?' );
+                this.stop();
+            }
+        }
+        this.close();
+    }
+    }

@@ -15,4 +15,16 @@ public class WAMBoard {
 
     public void close() {
     }
+
+    public void holeUp(int holeNo) {
+    }
+
+    public void updateScore(int[] score) {
+    }
+
+    public void holeDown(int holeNo) {
+    }
+
+    public void initializeTheBoard(int row, int column, int players, int playerNo) {
+    }
 }
