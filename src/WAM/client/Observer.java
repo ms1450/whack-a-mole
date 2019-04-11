@@ -1,4 +1,4 @@
-package client.gui;
+package WAM.client;
 
 import javax.security.auth.Subject;
 

@@ -1,6 +1,6 @@
-package client.gui;
-import common.WAMException;
-import common.WAMProtocol;
+package WAM.client;
+
+import WAM.WAMException;
 
 import java.io.IOException;
 import java.io.PrintStream;
@@ -8,7 +8,7 @@ import java.net.Socket;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
-import static common.WAMProtocol.*;
+import static WAM.WAMProtocol.*;
 
 public class WAMClient {
 
@@ -53,7 +53,7 @@ public class WAMClient {
             // Block waiting for the CONNECT message from the server.
             String request = this.networkIn.next();
             String arguments = this.networkIn.nextLine();
-            if (!request.equals(WAMProtocol.WELCOME)) {
+            if (!request.equals(WELCOME)) {
                 throw new WAMException("Expected WELCOME from server");
             }
             WAMClient.dPrint("Connected to server " + this.clientSocket);

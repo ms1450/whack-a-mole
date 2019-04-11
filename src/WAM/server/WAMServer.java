@@ -1,7 +1,7 @@
-package server;
+package WAM.server;
 
-import common.WAMException;
-import common.WAMProtocol;
+import WAM.WAMException;
+import WAM.WAMProtocol;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -68,3 +68,4 @@ public class WAMServer implements WAMProtocol ,Runnable {
         }
     }
 }
+

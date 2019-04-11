@@ -1,4 +1,4 @@
-package server;
+package WAM.server;
 
 public class WAMGame implements Runnable {
     private WAMPlayer[] players;
@@ -11,6 +11,7 @@ public class WAMGame implements Runnable {
 
     @Override
     public void run() {
+        // TODO Dade
 //        boolean go = true;
 //        while(go) {
 //            try {

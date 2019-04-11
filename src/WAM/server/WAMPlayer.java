@@ -1,7 +1,7 @@
-package server;
+package WAM.server;
 
-import common.WAMException;
-import common.WAMProtocol;
+import WAM.WAMProtocol;
+import WAM.WAMException;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -26,19 +26,19 @@ public class WAMPlayer implements WAMProtocol, Closeable {
     }
 
     public void welcome(int row, int column, int players, int playerNo) {
-        printer.println(WAMProtocol.WELCOME+" "+row+" "+column+" "+players+" "+playerNo);
+        printer.println(WELCOME+" "+row+" "+column+" "+players+" "+playerNo);
     }
 
     public void moleUp(int hole){
-        printer.println(WAMProtocol.MOLE_UP+" "+hole);
+        printer.println(MOLE_UP+" "+hole);
     }
 
     public void moleDown(int hole){
-        printer.println(WAMProtocol.MOLE_DOWN+" "+hole);
+        printer.println(MOLE_DOWN+" "+hole);
     }
 
     public void scores(int[] scores){
-        String s = WAMProtocol.SCORE;
+        String s = SCORE;
         for(int i = 0; i < scores.length;i++){
             s = s + " " + scores[i];
         }
@@ -65,15 +65,15 @@ public class WAMPlayer implements WAMProtocol, Closeable {
     }
 
     public void gameWon() {
-        printer.println(WAMProtocol.GAME_WON);
+        printer.println(GAME_WON);
     }
 
     public void gameLost() {
-        printer.println(WAMProtocol.GAME_LOST);
+        printer.println(GAME_LOST);
     }
 
     public void gameTied(){
-        printer.println(WAMProtocol.GAME_TIED);
+        printer.println(GAME_TIED);
     }
 
     public void error(String message) {

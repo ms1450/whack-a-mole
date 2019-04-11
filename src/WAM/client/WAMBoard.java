@@ -1,6 +1,8 @@
-package client.gui;
+package WAM.client;
 
 public class WAMBoard {
+    // TODO Dade
+
     public void error(String arguments) {
     }
 

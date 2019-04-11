@@ -1,4 +1,4 @@
-package common;
+package WAM;
 
 /**
  * The interface provides constants for all of the
