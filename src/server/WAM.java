@@ -1,4 +1,4 @@
-package WAM.server;
+package server;
 
 public class WAM {
     private int gameDuration;

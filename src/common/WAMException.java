@@ -1,4 +1,4 @@
-package WAM;
+package common;
 
 public class WAMException extends Exception {
     /**

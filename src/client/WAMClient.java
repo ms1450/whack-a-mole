@@ -1,6 +1,6 @@
-package WAM.client;
+package client;
 
-import WAM.WAMException;
+import common.WAMException;
 
 import java.io.IOException;
 import java.io.PrintStream;
@@ -8,7 +8,7 @@ import java.net.Socket;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
-import static WAM.WAMProtocol.*;
+import static common.WAMProtocol.*;
 
 public class WAMClient {
 
@@ -118,7 +118,7 @@ public class WAMClient {
         int column = Integer.parseInt(fields[1]);
         int players = Integer.parseInt(fields[2]);
         int playerNo = Integer.parseInt(fields[3]);
-        this.board.initializeTheBoard(row,column,players,playerNo);
+        this.board.initializeBoard(row,column,players,playerNo);
     }
 
     public void close() {

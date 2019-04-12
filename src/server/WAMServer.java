@@ -1,7 +1,7 @@
-package WAM.server;
+package server;
 
-import WAM.WAMException;
-import WAM.WAMProtocol;
+import common.WAMException;
+import common.WAMProtocol;
 
 import java.io.IOException;
 import java.net.ServerSocket;

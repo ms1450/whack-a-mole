@@ -1,7 +1,7 @@
-package WAM.server;
+package server;
 
-import WAM.WAMProtocol;
-import WAM.WAMException;
+import common.WAMProtocol;
+import common.WAMException;
 
 import java.io.Closeable;
 import java.io.IOException;

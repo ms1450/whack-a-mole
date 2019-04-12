@@ -1,4 +1,4 @@
-package WAM.server;
+package server;
 
 public class WAMGame implements Runnable {
     private WAMPlayer[] players;
