@@ -42,7 +42,6 @@ public class WAMGUI extends Application implements Observer<WAMBoard>{
         this.holes = new GridPane();
         this.holes.setHgap(10);
         this.holes.setVgap(10);
-        System.out.println(board.getColumns());
         for (int i = 0; i < board.getColumns(); i++){
             for (int j = 0; j < board.getRows(); j++){
                 ImageView hole = new ImageView(getClass().getResource("hole" +
@@ -51,7 +50,8 @@ public class WAMGUI extends Application implements Observer<WAMBoard>{
                         ".png").toExternalForm());
                 StackPane pane = new StackPane();
                 pane.getChildren().addAll(hole, mole);
-                this.holes.setAlignment(Pos.BOTTOM_LEFT);
+                pane.getChildren().get(1).setVisible(false);
+                this.holes.setAlignment(Pos.TOP_LEFT);
                 this.holes.add(pane, i, j);
             }
         }

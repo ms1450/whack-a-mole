@@ -10,7 +10,7 @@ public class WAMBoard {
 
     private List<Observer<WAMBoard>> observers;
 
-    private int score;
+    private int[] scores;
 
     private Hole[][] holes;
 
@@ -72,10 +72,13 @@ public class WAMBoard {
     }
 
     public void holeUp(int holeNo) {
+        int row = holeNo/rows - columns;
+        int col = holeNo/rows;
         alertObservers();
     }
 
-    public void updateScore(int[] score) {
+    public void updateScore(int[] newScore) {
+        scores = newScore;
         alertObservers();
     }
 
@@ -85,7 +88,10 @@ public class WAMBoard {
 
     public void initializeBoard(int rows, int columns, int players,
                                 int playerNo) {
-        this.score = 0;
+        this.scores = new int[players];
+        for (int score: scores){
+            score = 0;
+        }
         this.rows = rows;
         this.columns = columns;
         this.playerNo = playerNo;
@@ -99,5 +105,13 @@ public class WAMBoard {
 
     public WAMBoard(){
         this.observers = new LinkedList<>();
+
+        this.holes = new Hole[columns][rows];
+        for (int col = 0; col < columns; col++){
+            for (int row = 0; row < rows; row++){
+                holes[col][row] = Hole.EMPTY;
+            }
+        }
+        this.status = Status.RUNNING;
     }
 }
