@@ -1,6 +1,5 @@
 package client;
 
-import server.WAM;
 import server.WAM.*;
 
 import java.util.LinkedList;
@@ -100,8 +99,5 @@ public class WAMBoard {
 
     public WAMBoard(){
         this.observers = new LinkedList<>();
-
-
-
     }
 }
