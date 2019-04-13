@@ -8,9 +8,9 @@ import java.util.Random;
  */
 public class WAM {
     //The board with its rows and columns
-    private Hole[][]board;
-    private int row;
-    private int column;
+    private Hole[][] board;
+    public int row;
+    public int column;
 
     //Init for the Board
     public WAM(int row, int column){
@@ -45,6 +45,15 @@ public class WAM {
         }
     }
 
+    public int getRow(){
+        return row;
+    }
+
+    public int getColumn(){
+        return column;
+    }
+
+
     //ENUM to show two states of the hole, occupied and empty.
     public enum Hole{
         EMPTY('O'),
@@ -61,14 +70,9 @@ public class WAM {
     //Chooses a random Row and Column Number
     public int[] chooseRandomSlot(){
         Random r = new Random();
-        int rowVal = r.nextInt(this.row);
-        int colVal = r.nextInt(this.column);
+        int rowVal = r.nextInt(row);
+        int colVal = r.nextInt(column);
         return new int[] {rowVal, colVal};
     }
 
-
-
-
-
-    // TODO Dade
 }

@@ -1,5 +1,9 @@
 package client;
 
+import server.WAM;
+import server.WAM.*;
+
+import java.util.LinkedList;
 import java.util.List;
 
 public class WAMBoard {
@@ -8,6 +12,13 @@ public class WAMBoard {
     private List<Observer<WAMBoard>> observers;
 
     private int score;
+
+    private Hole[][] holes;
+
+    private int rows;
+    private int columns;
+    private int players;
+    private int playerNo;
 
     public enum Status {
         RUNNING, I_WON, I_LOST, TIE, ERROR;
@@ -73,8 +84,24 @@ public class WAMBoard {
         alertObservers();
     }
 
-    public void initializeBoard(int row, int column, int players,
+    public void initializeBoard(int rows, int columns, int players,
                                 int playerNo) {
         this.score = 0;
+        this.rows = rows;
+        this.columns = columns;
+        this.playerNo = playerNo;
+        this.players = players;
+        alertObservers();
+    }
+
+    public int getRows(){return rows;}
+
+    public int getColumns(){return columns;}
+
+    public WAMBoard(){
+        this.observers = new LinkedList<>();
+
+
+
     }
 }
