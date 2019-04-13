@@ -1,14 +1,28 @@
 package server;
 
-import java.io.IOException;
-
 /**
  * The actual class where the Game runs.
  */
-public class WAMGame implements Runnable {
+public class WAMGame implements Runnable{
     private WAMPlayer[] players;
     private WAM wam;
     private int gameDuration;
+
+    public void moleUpTime(){
+        try {
+            Thread.sleep(wam.getRandomUpTime());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void moleDownTime(){
+        try {
+            Thread.sleep(wam.getRandomDownTime());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 
     public WAMGame(int row, int column, WAMPlayer[] players, int gameDuration){
         this.players = players;
@@ -60,21 +74,48 @@ public class WAMGame implements Runnable {
         long endTime = System.currentTimeMillis() + gameDuration*1000;
 
         while (System.currentTimeMillis() < endTime) {
-            int[] pos = wam.chooseRandomSlot();
-            wam.popOut(pos[0],pos[1]);
-            informPlayers(true, pos[0], pos[1]);
+//            Thread[][] threads = new Thread[wam.getRow()][wam.getColumn()];
+//            for(int i = 0; i< wam.getRow();i++){
+//                for (int j = 0; j<wam.getColumn();j++){
+//                    threads[i][j] = new Thread(new HandleMoles(this.wam,getHoleNumFromRowAndCol(i,j),this.players));
+//                }
+//            }
+//
+//            for (int i = 0; i < wam.getRow(); i++) {
+//                for (int j = 0; j < wam.getColumn(); j++) {
+//                    threads[i][j].start();
+//                }
+//            }
 
-            while (System.currentTimeMillis() < wam.getRandomUpTime()*1000) {
+//            Thread thread = new Thread(new HandleMoles(this.wam, getHoleNumFromRowAndCol(0,0), this.players));
+//            thread.start();
+//TODO Figure out how to pop up multiple Moles at the Same time
 
-                System.out.println("MOLE is UP");
-            }
 
-            wam.popIn(pos[0],pos[1]);
-            informPlayers(false, pos[0], pos[1]);
 
-            while (System.currentTimeMillis() < wam.getRandomDownTime()) {
-                System.out.println("MOLE is Down");
-            }
+
+
+
+
+
+
+
+
+//            int[] pos = wam.chooseRandomSlot();
+//            wam.popOut(pos[0],pos[1]);
+//            informPlayers(true, pos[0], pos[1]);
+//
+//            while (System.currentTimeMillis() < wam.getRandomUpTime()*1000) {
+//
+//                System.out.println("MOLE is UP");
+//            }
+//
+//            wam.popIn(pos[0],pos[1]);
+//            informPlayers(false, pos[0], pos[1]);
+//
+//            while (System.currentTimeMillis() < wam.getRandomDownTime()) {
+//                System.out.println("MOLE is Down");
+//            }
         }
         //For now all the players get a tie.
         System.out.println("Game Over");
