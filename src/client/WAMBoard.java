@@ -94,9 +94,9 @@ public class WAMBoard {
         alertObservers();
     }
 
-    public int getRows(){return rows;}
+    public int getRows(){return this.rows;}
 
-    public int getColumns(){return columns;}
+    public int getColumns(){return this.columns;}
 
     public WAMBoard(){
         this.observers = new LinkedList<>();

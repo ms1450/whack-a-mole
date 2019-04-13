@@ -56,6 +56,7 @@ public class WAMClient {
             if (!request.equals(WELCOME)) {
                 throw new WAMException("Expected WELCOME from server");
             }
+            createBoard(arguments);
             WAMClient.dPrint("Connected to server " + this.clientSocket);
         }
         catch(IOException e) {
@@ -121,6 +122,10 @@ public class WAMClient {
         this.board.initializeBoard(row,column,players,playerNo);
     }
 
+    public WAMBoard getBoard(){
+        return board;
+    }
+
     public void close() {
         try {
             this.clientSocket.close();
@@ -138,9 +143,6 @@ public class WAMClient {
                 String arguments = this.networkIn.nextLine().trim();
                 WAMClient.dPrint( "Net message in = \"" + request + '"' );
                 switch ( request ) {
-                    case WELCOME:
-                        createBoard(arguments);
-                        break;
                     case SCORE:
                         scoresUpdate(arguments);
                         break;

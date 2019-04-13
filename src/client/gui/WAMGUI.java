@@ -25,6 +25,7 @@ public class WAMGUI extends Application implements Observer<WAMBoard>{
     private WAMBoard board;
     private GridPane holes;
     private Label score;
+    private BorderPane window;
 
     @Override
     public void init() throws WAMException {
@@ -41,8 +42,9 @@ public class WAMGUI extends Application implements Observer<WAMBoard>{
         this.holes = new GridPane();
         this.holes.setHgap(10);
         this.holes.setVgap(10);
-        for (int i = 0; i < 5; i++){
-            for (int j = 0; j < 3; j++){
+        System.out.println(board.getColumns());
+        for (int i = 0; i < board.getColumns(); i++){
+            for (int j = 0; j < board.getRows(); j++){
                 ImageView hole = new ImageView(getClass().getResource("hole" +
                         ".png").toExternalForm());
                 ImageView mole = new ImageView(getClass().getResource("mole" +
@@ -59,7 +61,7 @@ public class WAMGUI extends Application implements Observer<WAMBoard>{
     public void start(Stage stage) throws Exception {
         createHoles();
 
-        BorderPane window = new BorderPane();
+        window = new BorderPane();
         window.setCenter(holes);
 
         stage.setScene(new Scene(window));
