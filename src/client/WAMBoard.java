@@ -12,7 +12,7 @@ public class WAMBoard {
 
     private int[] scores;
 
-    private Hole[][] holes;
+    private Hole[] holes;
 
     private int rows;
     private int columns;
@@ -32,6 +32,10 @@ public class WAMBoard {
                     this.msg == null ? "" : (this.msg);
         }
 
+    }
+
+    public enum Hole {
+        EMPTY, OCCUPIED;
     }
 
     private Status status;
@@ -84,8 +88,7 @@ public class WAMBoard {
     }
 
     public void holeUp(int holeNo) {
-        int[] pos = holeNoToRowAndColumn(holeNo);
-        holes[pos[0]][pos[1]] = Hole.OCCUPIED;
+        holes[holeNo] = Hole.OCCUPIED;
         alertObservers();
     }
 
@@ -95,8 +98,7 @@ public class WAMBoard {
     }
 
     public void holeDown(int holeNo) {
-        int[] pos = holeNoToRowAndColumn(holeNo);
-        holes[pos[0]][pos[1]] = Hole.EMPTY;
+        holes[holeNo] = Hole.EMPTY;
         alertObservers();
     }
 
@@ -110,7 +112,15 @@ public class WAMBoard {
         this.columns = columns;
         this.playerNo = playerNo;
         this.players = players;
-        alertObservers();
+        this.holes = new Hole[columns*rows];
+        for (int i = 0; i < holes.length; i++){
+            holes[i] = Hole.EMPTY;
+        }
+    }
+
+    public Hole getContents(int index){
+        //System.out.println(index + " " + holes[index]);
+        return this.holes[index];
     }
 
     public int getRows(){return this.rows;}
@@ -120,12 +130,6 @@ public class WAMBoard {
     public WAMBoard(){
         this.observers = new LinkedList<>();
 
-        this.holes = new Hole[columns][rows];
-        for (int col = 0; col < columns; col++){
-            for (int row = 0; row < rows; row++){
-                holes[col][row] = Hole.EMPTY;
-            }
-        }
         this.status = Status.RUNNING;
     }
 }

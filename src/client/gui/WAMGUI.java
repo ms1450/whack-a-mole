@@ -7,14 +7,15 @@ import client.WAMClient;
 import common.WAMException;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
 import java.util.List;
@@ -26,6 +27,7 @@ public class WAMGUI extends Application implements Observer<WAMBoard>{
     private GridPane holes;
     private Label score;
     private BorderPane window;
+    private Scene scene;
 
     @Override
     public void init() throws WAMException {
@@ -49,9 +51,9 @@ public class WAMGUI extends Application implements Observer<WAMBoard>{
                 ImageView mole = new ImageView(getClass().getResource("mole" +
                         ".png").toExternalForm());
                 StackPane pane = new StackPane();
+                pane.setId(Integer.toString(i + j*board.getColumns()));
                 pane.getChildren().addAll(hole, mole);
                 pane.getChildren().get(1).setVisible(false);
-                this.holes.setAlignment(Pos.TOP_LEFT);
                 this.holes.add(pane, i, j);
             }
         }
@@ -64,7 +66,9 @@ public class WAMGUI extends Application implements Observer<WAMBoard>{
         window = new BorderPane();
         window.setCenter(holes);
 
-        stage.setScene(new Scene(window));
+        scene = new Scene(window);
+
+        stage.setScene(scene);
         stage.setResizable(false);
         stage.setTitle("Whack-A-Mole");
         stage.show();
@@ -72,8 +76,18 @@ public class WAMGUI extends Application implements Observer<WAMBoard>{
         client.startListener();
     }
 
-    public void refresh() {
+    public ObservableList<Node> getButton(int col, int row){
+        return ((StackPane)holes.getChildren().get(col*board.getRows() + row)).getChildren();
+    }
 
+    public void refresh() {
+        for (int i = 0; i < board.getRows()*board.getColumns(); i++){
+            if (board.getContents(i) == WAMBoard.Hole.OCCUPIED){
+                ((StackPane) scene.lookup("#" + i)).getChildren().get(1).setVisible(true);
+            }else {
+                ((StackPane) scene.lookup("#" + i)).getChildren().get(1).setVisible(false);
+            }
+        }
     }
 
     @Override

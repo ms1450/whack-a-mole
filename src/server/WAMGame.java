@@ -1,10 +1,11 @@
 package server;
 
+import java.io.IOException;
+
 /**
  * The actual class where the Game runs.
  */
 public class WAMGame implements Runnable {
-
     private WAMPlayer[] players;
     private WAM wam;
     private int gameDuration;
@@ -16,6 +17,7 @@ public class WAMGame implements Runnable {
     }
 
     public int getHoleNumFromRowAndCol(int row, int col){
+        int rowTotal = wam.getRow();
         int colTotal = wam.getColumn();
         int rowCounter = 0;
         int colCounter = 0;
