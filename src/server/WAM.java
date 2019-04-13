@@ -75,4 +75,14 @@ public class WAM {
         return new int[] {rowVal, colVal};
     }
 
+    public int getRandomUpTime(){
+        Random r = new Random();
+        return r.nextInt((5 - 3) + 1) + 3;
+    }
+
+    public int getRandomDownTime(){
+        Random r = new Random();
+        return r.nextInt((8 - 2)+ 1)+2;
+    }
+
 }

@@ -1,5 +1,7 @@
 package server;
 
+import java.io.IOException;
+
 /**
  * The actual class where the Game runs.
  */
@@ -14,54 +16,47 @@ public class WAMGame implements Runnable {
         this.gameDuration = gameDuration;
     }
 
+    public int getHoleNumFromRowAndCol(int row, int col){
+        int rowTotal = wam.getRow();
+        int colTotal = wam.getColumn()
+        int rowCounter = 0;
+        int colCounter = 0;
+        int counter = 0;
+        while(rowCounter < row){
+            counter += colTotal + 1;
+            row ++;
+        }
+        while(colCounter < col){
+            counter += 1;
+            col ++;
+        }
+        return counter;
+    }
+
+    public void informPlayers(boolean state, int row, int col){
+        if(state){
+            for(WAMPlayer p: players){
+                //p.moleUp(row, col);
+            }
+        }
+
+    }
+
     @Override
     public void run() {
         long endTime = System.currentTimeMillis() + gameDuration*1000;
         while (System.currentTimeMillis() < endTime) {
-            //loops till the seconds have passed.
             int[] pos = wam.chooseRandomSlot();
-            //pos[0] will be the row and pos[1] the column
-            //Now we have to pop that specific mole and wait till either the player knock it
-            // or a specific time passes, 1 sec? 500 mili? something in that value which has to be random as well.
-            // and based on that get inputs from the user (which can be done later, update the score.)
+            wam.popOut(pos[0],pos[1]);
+            //informPlayers(true);
+            while (System.currentTimeMillis() < wam.getRandomUpTime()*1000) {
 
-
-
-
-
-
-
-
+                System.out.println("MOLE is UP");
+            }
+            wam.popIn(pos[0],pos[1]);
+            while (System.currentTimeMillis() < wam.getRandomDownTime()) {
+                System.out.println("MOLE is Down");
+            }
         }
-
-
-
-
-
-
-
-
-
-
-        // TODO Dade
-//        boolean go = true;
-//        while(go) {
-//            try {
-//                if(makeMove(playerOne, playerTwo)) {
-//                    go = false;
-//                }
-//                else if(makeMove(playerTwo, playerOne)) {
-//                    go = false;
-//                }
-//            }
-//            catch(ConnectFourException e) {
-//                playerOne.error(e.getMessage());
-//                playerTwo.error(e.getMessage());
-//                go = false;
-//            }
-//        }
-//
-//        playerOne.close();
-//        playerTwo.close();
-    }
+     }
 }
