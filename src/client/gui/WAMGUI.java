@@ -88,6 +88,7 @@ public class WAMGUI extends Application implements Observer<WAMBoard>{
                 ((StackPane) scene.lookup("#" + i)).getChildren().get(1).setVisible(false);
             }
         }
+
     }
 
     @Override
