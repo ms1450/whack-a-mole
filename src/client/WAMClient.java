@@ -90,6 +90,7 @@ public class WAMClient {
         this.stop();
     }
 
+
     public void moleUp(String args){
         String[] val = args.trim().split(" ");
         int holeNo = Integer.parseInt(val[0]);
