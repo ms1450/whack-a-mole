@@ -1,7 +1,5 @@
 package server;
 
-import java.io.IOException;
-
 /**
  * The actual class where the Game runs.
  */
@@ -17,18 +15,17 @@ public class WAMGame implements Runnable {
     }
 
     public int getHoleNumFromRowAndCol(int row, int col){
-        int rowTotal = wam.getRow();
-        int colTotal = wam.getColumn()
+        int colTotal = wam.getColumn();
         int rowCounter = 0;
         int colCounter = 0;
         int counter = 0;
         while(rowCounter < row){
             counter += colTotal + 1;
-            row ++;
+            rowCounter ++;
         }
         while(colCounter < col){
             counter += 1;
-            col ++;
+            colCounter ++;
         }
         return counter;
     }
@@ -36,10 +33,14 @@ public class WAMGame implements Runnable {
     public void informPlayers(boolean state, int row, int col){
         if(state){
             for(WAMPlayer p: players){
-                //p.moleUp(row, col);
+                p.moleUp(getHoleNumFromRowAndCol(row,col));
             }
         }
-
+        else{
+            for(WAMPlayer p: players){
+                p.moleDown(getHoleNumFromRowAndCol(row,col));
+            }
+        }
     }
 
     @Override
@@ -48,15 +49,17 @@ public class WAMGame implements Runnable {
         while (System.currentTimeMillis() < endTime) {
             int[] pos = wam.chooseRandomSlot();
             wam.popOut(pos[0],pos[1]);
-            //informPlayers(true);
+            informPlayers(true, pos[0], pos[1]);
             while (System.currentTimeMillis() < wam.getRandomUpTime()*1000) {
 
                 System.out.println("MOLE is UP");
             }
             wam.popIn(pos[0],pos[1]);
+            informPlayers(false, pos[0], pos[1]);
             while (System.currentTimeMillis() < wam.getRandomDownTime()) {
                 System.out.println("MOLE is Down");
             }
         }
+        System.out.println("Game Over");
      }
 }

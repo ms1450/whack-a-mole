@@ -67,13 +67,25 @@ public class WAMBoard {
         alertObservers();
     }
 
+    private int[] holeNoToRowAndColumn(int hole){
+        int rowNum = 0;
+        int colNum = 0;
+        int maxRow = 3;
+        while(hole>maxRow){
+            hole -= maxRow+1;
+            rowNum ++;
+        }
+        colNum = hole;
+        return new int[]{rowNum,colNum};
+    }
+
     public void close() {
         alertObservers();
     }
 
     public void holeUp(int holeNo) {
-        int row = holeNo/rows - columns;
-        int col = holeNo/rows;
+        int[] pos = holeNoToRowAndColumn(holeNo);
+        holes[pos[0]][pos[1]] = Hole.OCCUPIED;
         alertObservers();
     }
 
@@ -83,6 +95,8 @@ public class WAMBoard {
     }
 
     public void holeDown(int holeNo) {
+        int[] pos = holeNoToRowAndColumn(holeNo);
+        holes[pos[0]][pos[1]] = Hole.EMPTY;
         alertObservers();
     }
 
