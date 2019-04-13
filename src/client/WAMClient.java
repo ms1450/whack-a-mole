@@ -142,6 +142,7 @@ public class WAMClient {
                 String request = this.networkIn.next();
                 String arguments = this.networkIn.nextLine().trim();
                 WAMClient.dPrint( "Net message in = \"" + request + '"' );
+                System.out.println(request);
                 switch ( request ) {
                     case SCORE:
                         scoresUpdate(arguments);

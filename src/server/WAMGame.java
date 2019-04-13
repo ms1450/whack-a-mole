@@ -25,6 +25,13 @@ public class WAMGame implements Runnable {
             // or a specific time passes, 1 sec? 500 mili? something in that value which has to be random as well.
             // and based on that get inputs from the user (which can be done later, update the score.)
 
+
+
+
+
+
+
+
         }
 
 

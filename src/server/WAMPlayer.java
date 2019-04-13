@@ -13,6 +13,7 @@ public class WAMPlayer implements WAMProtocol, Closeable {
     private  Socket sock;
     private  Scanner scanner;
     private  PrintStream printer;
+    private int score;
 
     public WAMPlayer(Socket sock) throws WAMException {
         this.sock = sock;
@@ -38,11 +39,7 @@ public class WAMPlayer implements WAMProtocol, Closeable {
     }
 
     public void scores(int[] scores){
-        String s = SCORE;
-        for(int i = 0; i < scores.length;i++){
-            s = s + " " + scores[i];
-        }
-        printer.println(s);
+        String s = " ";
     }
 
     public int whack() throws WAMException {
