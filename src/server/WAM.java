@@ -35,15 +35,15 @@ public class WAM {
     }
 
     //WAMGame will send this to the instance when the mole gets whacked and once whacked the mole will go back.
-    public int whack(int row, int col){
-        if(board[row][col].equals(Hole.OCCUPIED)){
-            board[row][col] = Hole.EMPTY;
-            return 2;
-        }
-        else{
-            return -1;
-        }
-    }
+//    public int whack(int row, int col){
+//        if(board[row][col].equals(Hole.OCCUPIED)){
+//            board[row][col] = Hole.EMPTY;
+//            return 2;
+//        }
+//        else{
+//            return -1;
+//        }
+//    }
 
     public int getRow(){
         return row;

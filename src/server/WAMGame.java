@@ -4,6 +4,7 @@ package server;
  * The actual class where the Game runs.
  */
 public class WAMGame implements Runnable {
+
     private WAMPlayer[] players;
     private WAM wam;
     private int gameDuration;
@@ -43,23 +44,38 @@ public class WAMGame implements Runnable {
         }
     }
 
+    public void closeAll(){
+        for(WAMPlayer player: players){
+            player.gameTied();
+            player.close();
+        }
+    }
+
+
     @Override
     public void run() {
+
         long endTime = System.currentTimeMillis() + gameDuration*1000;
+
         while (System.currentTimeMillis() < endTime) {
             int[] pos = wam.chooseRandomSlot();
             wam.popOut(pos[0],pos[1]);
             informPlayers(true, pos[0], pos[1]);
+
             while (System.currentTimeMillis() < wam.getRandomUpTime()*1000) {
 
                 System.out.println("MOLE is UP");
             }
+
             wam.popIn(pos[0],pos[1]);
             informPlayers(false, pos[0], pos[1]);
+
             while (System.currentTimeMillis() < wam.getRandomDownTime()) {
                 System.out.println("MOLE is Down");
             }
         }
+        //For now all the players get a tie.
         System.out.println("Game Over");
+        closeAll();
      }
 }

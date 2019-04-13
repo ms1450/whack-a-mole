@@ -14,6 +14,7 @@ public class WAMPlayer implements WAMProtocol, Closeable {
     private  Scanner scanner;
     private  PrintStream printer;
     private int score;
+    private int playerNo;
 
     public WAMPlayer(Socket sock) throws WAMException {
         this.sock = sock;
@@ -27,6 +28,7 @@ public class WAMPlayer implements WAMProtocol, Closeable {
     }
 
     public void welcome(int row, int column, int players, int playerNo) {
+        this.playerNo = playerNo;
         printer.println(WELCOME+" "+row+" "+column+" "+players+" "+playerNo);
     }
 
@@ -39,27 +41,32 @@ public class WAMPlayer implements WAMProtocol, Closeable {
     }
 
     public void scores(int[] scores){
-        String s = " ";
+        this.score = scores[playerNo];
+        String s = "";
+        for(int i:scores){
+            s = s + " " + i;
+        }
+        printer.println(SCORE + " " + s);
     }
 
-    public int whack() throws WAMException {
-        String response = scanner.nextLine();
-
-        if(response.startsWith(WHACK)) {
-            String[] tokens = response.split(" ");
-            if(tokens.length == 2) {
-                return Integer.parseInt(tokens[1]);
-            }
-            else {
-                throw new WAMException("Invalid player response: " +
-                        response);
-            }
-        }
-        else {
-            throw new WAMException("Invalid player response: " +
-                    response);
-        }
-    }
+//    public int whack() throws WAMException {
+//        String response = scanner.nextLine();
+//
+//        if(response.startsWith(WHACK)) {
+//            String[] tokens = response.split(" ");
+//            if(tokens.length == 2) {
+//                return Integer.parseInt(tokens[1]);
+//            }
+//            else {
+//                throw new WAMException("Invalid player response: " +
+//                        response);
+//            }
+//        }
+//        else {
+//            throw new WAMException("Invalid player response: " +
+//                    response);
+//        }
+//    }
 
     public void gameWon() {
         printer.println(GAME_WON);
