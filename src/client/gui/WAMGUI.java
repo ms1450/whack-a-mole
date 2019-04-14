@@ -7,9 +7,6 @@ import client.WAMClient;
 import common.WAMException;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.collections.ObservableList;
-import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
@@ -20,15 +17,37 @@ import javafx.stage.Stage;
 
 import java.util.List;
 
-public class WAMGUI extends Application implements Observer<WAMBoard>{
+
+/**
+ * The GUI acts as a controller and view for the users to interact with the
+ * game.
+ * @author Dade Wood
+ * @author Mehul Sen
+ */
+public class WAMGUI extends Application implements Observer<WAMBoard> {
     // TODO Dade
+
+    // The client that will will connect to the server.
     private WAMClient client;
+
+    // The instance of the game board that the users will see.
     private WAMBoard board;
+
+    // All of the holes that are displayed on the GUI
     private GridPane holes;
+
     private Label score;
+
+    // The BorderPane that will hold all the GUI parts
     private BorderPane window;
+
+    // The scene for the GUI (Used for quick lookup of the holes)
     private Scene scene;
 
+    /**
+     * Initializes the WAMBoard and WAMClient.
+     * @throws WAMException If something goes wrong
+     */
     @Override
     public void init() throws WAMException {
         List<String> args = getParameters().getRaw();
@@ -40,6 +59,10 @@ public class WAMGUI extends Application implements Observer<WAMBoard>{
         this.client = new WAMClient(host, port, this.board);
     }
 
+    /**
+     * Creates the StackPanes that hold the images of the moles and holes and
+     * adds each one the the gridPane.
+     */
     public void createHoles(){
         this.holes = new GridPane();
         this.holes.setHgap(10);
@@ -59,6 +82,11 @@ public class WAMGUI extends Application implements Observer<WAMBoard>{
         }
     }
 
+    /**
+     * Creates the scene for javaFX to display for the users.
+     * @param stage The window everything is shown on
+     * @throws Exception If something goes wrong
+     */
     @Override
     public void start(Stage stage) throws Exception {
         createHoles();
@@ -76,10 +104,10 @@ public class WAMGUI extends Application implements Observer<WAMBoard>{
         client.startListener();
     }
 
-    public ObservableList<Node> getButton(int col, int row){
-        return ((StackPane)holes.getChildren().get(col*board.getRows() + row)).getChildren();
-    }
-
+    /**
+     * Refreshes the board of moles when something is changed and displays it
+     * to the users.
+     */
     public void refresh() {
         for (int i = 0; i < board.getRows()*board.getColumns(); i++){
             if (board.getContents(i) == WAMBoard.Hole.OCCUPIED){
@@ -91,6 +119,10 @@ public class WAMGUI extends Application implements Observer<WAMBoard>{
 
     }
 
+    /**
+     * Tells the board to refresh when the board changes.
+     * @param wamBoard
+     */
     @Override
     public void update(WAMBoard wamBoard) {
         if (Platform.isFxApplicationThread()){
@@ -100,12 +132,20 @@ public class WAMGUI extends Application implements Observer<WAMBoard>{
         }
     }
 
+    /**
+     * Ends the client and board connection when the window is closed by the
+     * user.
+     */
     @Override
     public void stop(){
         client.close();
         board.close();
     }
 
+    /**
+     * Starts the GUI.
+     * @param args The host and port number that the client needs to start on
+     */
     public static void main(String[] args){
         if (args.length != 2){
             System.out.println("Usage: java WAMGUI host port");
@@ -114,5 +154,4 @@ public class WAMGUI extends Application implements Observer<WAMBoard>{
             Application.launch(args);
         }
     }
-
 }

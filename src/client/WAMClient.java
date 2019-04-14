@@ -10,6 +10,12 @@ import java.util.Scanner;
 
 import static common.WAMProtocol.*;
 
+/**
+ * The client takes messages from the server, modifies its version of the
+ * WAMBoard and tells the view (GUI) to update.
+ * @author Mehul Sen
+ * @author Dade Wood
+ */
 public class WAMClient {
 
     private static final boolean DEBUG = false;
@@ -20,20 +26,40 @@ public class WAMClient {
         }
     }
 
+    // The socket for this client
     private Socket clientSocket;
+
+    // Takes in output from the server
     private Scanner networkIn;
+
+    // Sends messages back to the server
     private PrintStream networkOut;
+
+    // The board that this client is interacting with
     private WAMBoard board;
+
+    // If the server is running
     private boolean go;
 
+    /**
+     * Checks if the client is good to run.
+     * @return
+     */
     private synchronized boolean goodToGo() {
         return this.go;
     }
 
+    /**
+     * Tells the client that it should stop running.
+     */
     private synchronized void stop() {
         this.go = false;
     }
 
+    /**
+     * Sends an error with a message.
+     * @param arguments the message
+     */
     public void error( String arguments ) {
         WAMClient.dPrint( '!' + ERROR + ',' + arguments );
         dPrint( "Fatal error: " + arguments );
@@ -41,6 +67,13 @@ public class WAMClient {
         this.stop();
     }
 
+    /**
+     * Creates the client.
+     * @param host The host name for the socket
+     * @param port The port number for the socket
+     * @param board The board that this client will interact with
+     * @throws WAMException When an error occurs
+     */
     public WAMClient(String host, int port, WAMBoard board)
             throws WAMException {
         try {
@@ -64,10 +97,16 @@ public class WAMClient {
         }
     }
 
+    /**
+     * Tells the observer to start listening for updates.
+     */
     public void startListener() {
         new Thread(() -> this.run()).start();
     }
 
+    /**
+     * Tells the board that the game has been won.
+     */
     public void gameWon() {
         WAMClient.dPrint( '!' + GAME_WON );
 
@@ -76,6 +115,9 @@ public class WAMClient {
         this.stop();
     }
 
+    /**
+     * Tells the board that the game has been lost.
+     */
     public void gameLost() {
         WAMClient.dPrint( '!' + GAME_LOST );
         dPrint( "You lost! Boo!" );
@@ -83,6 +125,9 @@ public class WAMClient {
         this.stop();
     }
 
+    /**
+     * Tells the board that the game has been tied.
+     */
     public void gameTied() {
         WAMClient.dPrint( '!' + GAME_TIED );
         dPrint( "You tied! Meh!" );
@@ -91,18 +136,30 @@ public class WAMClient {
     }
 
 
+    /**
+     * Tells the board that a mole has gone up.
+     * @param args which hole the mole occupies
+     */
     public void moleUp(String args){
         String[] val = args.trim().split(" ");
         int holeNo = Integer.parseInt(val[0]);
         this.board.holeUp(holeNo);
     }
 
+    /**
+     * Tells the board that a mole has gone down.
+     * @param args which hole the mole leaves
+     */
     public void moleDown(String args){
         String[] val = args.trim().split(" ");
         int holeNo = Integer.parseInt(val[0]);
         this.board.holeDown(holeNo);
     }
 
+    /**
+     * Tells the board that the scores have been updated.
+     * @param args the new scores
+     */
     public void scoresUpdate(String args){
         String[] val = args.trim().split(" ");
         int[] scores = new int[val.length-1];
@@ -114,6 +171,11 @@ public class WAMClient {
         this.board.updateScore(scores);
     }
 
+    /**
+     * Creates the board when it receives the welcome message.
+     * @param args the row, column, players, and playerNo of the board being
+     *             created
+     */
     public void createBoard(String args){
         String[] fields = args.trim().split( " " );
         int row = Integer.parseInt(fields[0]);
@@ -123,10 +185,9 @@ public class WAMClient {
         this.board.initializeBoard(row,column,players,playerNo);
     }
 
-    public WAMBoard getBoard(){
-        return board;
-    }
-
+    /**
+     * Closes the client and the board.
+     */
     public void close() {
         try {
             this.clientSocket.close();
@@ -137,13 +198,17 @@ public class WAMClient {
         this.board.close();
     }
 
+    /**
+     * Depending on the message received from the server, the client will do
+     * various actions.
+     */
     private void run() {
         while (this.goodToGo()) {
             try {
                 String request = this.networkIn.next();
                 String arguments = this.networkIn.nextLine().trim();
                 WAMClient.dPrint( "Net message in = \"" + request + '"' );
-                System.out.println(request+arguments);
+                // System.out.println(request+arguments);
                 switch ( request ) {
                     case SCORE:
                         scoresUpdate(arguments);
@@ -184,4 +249,4 @@ public class WAMClient {
         }
         this.close();
     }
-    }
+}
