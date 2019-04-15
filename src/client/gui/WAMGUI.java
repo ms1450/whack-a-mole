@@ -10,9 +10,9 @@ import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.util.List;
@@ -36,7 +36,7 @@ public class WAMGUI extends Application implements Observer<WAMBoard> {
     // All of the holes that are displayed on the GUI
     private GridPane holes;
 
-    private Label score;
+    private VBox scores;
 
     // The BorderPane that will hold all the GUI parts
     private BorderPane window;
@@ -78,7 +78,29 @@ public class WAMGUI extends Application implements Observer<WAMBoard> {
                 pane.getChildren().addAll(hole, mole);
                 pane.getChildren().get(1).setVisible(false);
                 this.holes.add(pane, i, j);
+
+                pane.setOnMouseClicked(event -> this.sendHit(pane));
             }
+        }
+    }
+
+    public void sendHit(StackPane pane){
+        int holeNo = Integer.parseInt(pane.getId());
+        if (board.getContents(holeNo) == WAMBoard.Hole.OCCUPIED){
+            board.holeDown(holeNo);
+            board.addScore();
+        } else {
+            board.substractScore();
+        }
+    }
+
+    public void createScores(){
+        scores = new VBox();
+        for (int score: board.getScores()){
+            Text displayScore = new Text();
+            displayScore.setText(Integer.toString(score));
+            displayScore.setFont(Font.font(30));
+            scores.getChildren().add(displayScore);
         }
     }
 
@@ -91,8 +113,11 @@ public class WAMGUI extends Application implements Observer<WAMBoard> {
     public void start(Stage stage) throws Exception {
         createHoles();
 
+        createScores();
+
         window = new BorderPane();
         window.setCenter(holes);
+        window.setRight(scores);
 
         scene = new Scene(window);
 
@@ -115,6 +140,10 @@ public class WAMGUI extends Application implements Observer<WAMBoard> {
             }else {
                 ((StackPane) scene.lookup("#" + i)).getChildren().get(1).setVisible(false);
             }
+        }
+
+        for (int i = 0; i < board.getScores().length; i++){
+            ((Text) scores.getChildren().get(i)).setText(Integer.toString(board.getScores()[i]));
         }
 
     }

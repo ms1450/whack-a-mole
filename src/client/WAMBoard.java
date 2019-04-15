@@ -147,6 +147,14 @@ public class WAMBoard {
         alertObservers();
     }
 
+    public void addScore(){
+        this.scores[playerNo] += 2;
+    }
+
+    public void substractScore(){
+        this.scores[playerNo]--;
+    }
+
     /**
      * Initializes the game board once the server sends the WELCOME message.
      * @param rows number of rows for the board
@@ -191,6 +199,8 @@ public class WAMBoard {
      * @return integer of the columns
      */
     public int getColumns(){return this.columns;}
+
+    public int[] getScores(){return this.scores;}
 
     /**
      * Constructor for the WAMBoard. Sets the status to RUNNING and
