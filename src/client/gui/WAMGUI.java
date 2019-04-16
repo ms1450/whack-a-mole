@@ -7,12 +7,14 @@ import client.WAMClient;
 import common.WAMException;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.util.List;
@@ -25,8 +27,6 @@ import java.util.List;
  * @author Mehul Sen
  */
 public class WAMGUI extends Application implements Observer<WAMBoard> {
-    // TODO Dade
-
     // The client that will will connect to the server.
     private WAMClient client;
 
@@ -36,7 +36,9 @@ public class WAMGUI extends Application implements Observer<WAMBoard> {
     // All of the holes that are displayed on the GUI
     private GridPane holes;
 
-    private Label score;
+    private VBox scores;
+
+    private Label gameStatus;
 
     // The BorderPane that will hold all the GUI parts
     private BorderPane window;
@@ -78,7 +80,31 @@ public class WAMGUI extends Application implements Observer<WAMBoard> {
                 pane.getChildren().addAll(hole, mole);
                 pane.getChildren().get(1).setVisible(false);
                 this.holes.add(pane, i, j);
+
+                pane.setOnMouseClicked(event -> this.sendHit(pane));
             }
+        }
+    }
+
+    public void sendHit(StackPane pane){
+        if (board.getStatus() == WAMBoard.Status.RUNNING) {
+            int holeNo = Integer.parseInt(pane.getId());
+            if (board.getContents(holeNo) == WAMBoard.Hole.OCCUPIED) {
+                board.addScore();
+                board.holeDown(holeNo);
+            } else {
+                board.subtractScore();
+            }
+        }
+    }
+
+    public void createScores(){
+        scores = new VBox();
+        for (int score: board.getScores()){
+            Text displayScore = new Text();
+            displayScore.setText("Player #" + (board.getPlayerNo()+1) + ": " + score);
+            displayScore.setFont(Font.font(30));
+            scores.getChildren().add(displayScore);
         }
     }
 
@@ -91,8 +117,19 @@ public class WAMGUI extends Application implements Observer<WAMBoard> {
     public void start(Stage stage) throws Exception {
         createHoles();
 
+        createScores();
+
+        gameStatus = new Label();
+        gameStatus.setFont(Font.font(30));
+
+        Insets insets = new Insets(50);
+
         window = new BorderPane();
         window.setCenter(holes);
+        window.setRight(scores);
+        window.setBottom(gameStatus);
+        BorderPane.setAlignment(gameStatus, Pos.BASELINE_CENTER);
+        BorderPane.setMargin(scores, insets);
 
         scene = new Scene(window);
 
@@ -109,12 +146,30 @@ public class WAMGUI extends Application implements Observer<WAMBoard> {
      * to the users.
      */
     public void refresh() {
+        // TODO find way to only access the one piece updated instead of
+        //  checking each hole
         for (int i = 0; i < board.getRows()*board.getColumns(); i++){
             if (board.getContents(i) == WAMBoard.Hole.OCCUPIED){
                 ((StackPane) scene.lookup("#" + i)).getChildren().get(1).setVisible(true);
             }else {
                 ((StackPane) scene.lookup("#" + i)).getChildren().get(1).setVisible(false);
             }
+        }
+
+        // TODO change this to better form with only the score part getting
+        //  changed each time
+        for (int i = 0; i < board.getScores().length; i++){
+            ((Text) scores.getChildren().get(i)).setText("Player #" + (board.getPlayerNo()+1) + ": " + board.getScores()[i]);
+        }
+
+        if (board.getStatus() == WAMBoard.Status.I_WON){
+            gameStatus.setText("You Won.");
+        } else if(board.getStatus() == WAMBoard.Status.I_LOST){
+            gameStatus.setText("You Lost.");
+        } else if (board.getStatus() == WAMBoard.Status.TIE){
+            gameStatus.setText("You Tied.");
+        } else if (board.getStatus() == WAMBoard.Status.ERROR) {
+            gameStatus.setText("ERROR");
         }
 
     }
