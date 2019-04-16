@@ -162,7 +162,7 @@ public class WAMClient {
      */
     public void scoresUpdate(String args){
         String[] val = args.trim().split(" ");
-        int[] scores = new int[val.length-1];
+        int[] scores = new int[val.length];
         int i = 0;
         for(String s:val) {
             scores[i] = Integer.parseInt(s);
@@ -187,10 +187,10 @@ public class WAMClient {
 
     /**
      * Send the WHACK to the Server
-     * @param hole hole number on which WHACK is made
+     * @param holeNo hole number on which WHACK is made
      */
-    public void sendWHACK(int hole){
-        networkOut.println(WHACK + " " + hole);
+    public void sendWHACK(int holeNo){
+        this.networkOut.println(WHACK + " " + holeNo + " " + this.board.getPlayerNo());
     }
 
     /**
@@ -216,7 +216,7 @@ public class WAMClient {
                 String request = this.networkIn.next();
                 String arguments = this.networkIn.nextLine().trim();
                 WAMClient.dPrint( "Net message in = \"" + request + '"' );
-                // System.out.println(request+arguments);
+                //System.out.println(request+arguments);
                 switch ( request ) {
                     case SCORE:
                         scoresUpdate(arguments);

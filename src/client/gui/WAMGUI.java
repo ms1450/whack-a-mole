@@ -89,12 +89,7 @@ public class WAMGUI extends Application implements Observer<WAMBoard> {
     public void sendHit(StackPane pane){
         if (board.getStatus() == WAMBoard.Status.RUNNING) {
             int holeNo = Integer.parseInt(pane.getId());
-            if (board.getContents(holeNo) == WAMBoard.Hole.OCCUPIED) {
-                board.addScore();
-                board.holeDown(holeNo);
-            } else {
-                board.subtractScore();
-            }
+            this.client.sendWHACK(holeNo);
         }
     }
 

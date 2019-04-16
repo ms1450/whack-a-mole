@@ -1,5 +1,6 @@
 package client;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -31,7 +32,7 @@ public class WAMBoard {
     private int playerNo;
 
     //The Score of the Player
-    private int score;
+    private int[] scores;
 
     /**
      * All the different statuses that the game could be in.
@@ -134,7 +135,7 @@ public class WAMBoard {
      * @param newScore the new score that changed
      */
     public void updateScore(int[] newScore) {
-        this.score = newScore[playerNo];
+        this.scores = newScore;
         alertObservers();
     }
 
@@ -156,7 +157,10 @@ public class WAMBoard {
      */
     public void initializeBoard(int rows, int columns, int players,
                                 int playerNo) {
-        this.score = 0;
+        this.scores = new int[players];
+        for (int score: scores) {
+            score = 0;
+        }
         this.rows = rows;
         this.columns = columns;
         this.playerNo = playerNo;
@@ -189,7 +193,7 @@ public class WAMBoard {
      */
     public int getColumns(){return this.columns;}
 
-    public int getScores(){return this.score;}
+    public int[] getScores(){return this.scores;}
 
     public Status getStatus(){return this.status;}
 
