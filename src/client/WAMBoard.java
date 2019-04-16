@@ -147,16 +147,6 @@ public class WAMBoard {
         alertObservers();
     }
 
-    public void addScore(){
-        this.scores[playerNo] += 2;
-    }
-
-    public void subtractScore(){
-        if (scores[playerNo] > 0) {
-            this.scores[playerNo]--;
-        }
-    }
-
     /**
      * Initializes the game board once the server sends the WELCOME message.
      * @param rows number of rows for the board
@@ -199,7 +189,7 @@ public class WAMBoard {
      */
     public int getColumns(){return this.columns;}
 
-    public int[] getScores(){return this.scores;}
+    public int getScores(){return this.score;}
 
     public Status getStatus(){return this.status;}
 
