@@ -151,8 +151,10 @@ public class WAMBoard {
         this.scores[playerNo] += 2;
     }
 
-    public void substractScore(){
-        this.scores[playerNo]--;
+    public void subtractScore(){
+        if (scores[playerNo] > 0) {
+            this.scores[playerNo]--;
+        }
     }
 
     /**
@@ -201,6 +203,11 @@ public class WAMBoard {
     public int getColumns(){return this.columns;}
 
     public int[] getScores(){return this.scores;}
+
+    public Status getStatus(){return this.status;}
+
+    public int getPlayerNo(){return this.playerNo;}
+
 
     /**
      * Constructor for the WAMBoard. Sets the status to RUNNING and
