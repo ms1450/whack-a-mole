@@ -186,6 +186,14 @@ public class WAMClient {
     }
 
     /**
+     * Send the WHACK to the Server
+     * @param hole hole number on which WHACK is made
+     */
+    public void sendWHACK(int hole){
+        networkOut.println(WHACK + " " + hole);
+    }
+
+    /**
      * Closes the client and the board.
      */
     public void close() {

@@ -7,6 +7,11 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+/**
+ * This is the Server of WAM
+ * @author Dade Wood
+ * @author Mehul Sen
+ */
 public class WAMServer implements WAMProtocol ,Runnable {
 
     private ServerSocket server;
@@ -15,6 +20,15 @@ public class WAMServer implements WAMProtocol ,Runnable {
     private int players;
     private int gameDuration;
 
+    /**
+     * Constructor for this Class
+     * @param port Port number to connect with Client on
+     * @param row Rows of the Board
+     * @param column Columns of the Board
+     * @param players Number of Players playing the Game
+     * @param gameDuration The duration for which the game should run.
+     * @throws WAMException Any Exception Caused by the Game
+     */
     public WAMServer(int port, int row, int column, int players, int gameDuration) throws WAMException {
         try {
             server = new ServerSocket(port);
@@ -27,6 +41,11 @@ public class WAMServer implements WAMProtocol ,Runnable {
         }
     }
 
+    /**
+     * Main method to run the Server.
+     * @param args Arguments passed.
+     * @throws WAMException Exception the Game might cause.
+     */
     public static void main(String[] args) throws WAMException {
 
         if (args.length != 5) {
@@ -42,17 +61,20 @@ public class WAMServer implements WAMProtocol ,Runnable {
         server.run();
     }
 
+    /**
+     * Runs the WAMGame Class and starts the Game by sending out the WELCOME Messages.
+     */
     @Override
     public void run() {
         try {
             WAMPlayer[] playerArray = new WAMPlayer[players];
-            for(int player = 0; player < players; player++){
-                System.out.println("Waiting for player "+player+1);
+            for(int playerNo = 0; playerNo < players; playerNo++){
+                System.out.println("Waiting for player "+playerNo+1+ "... ");
                 Socket socket = server.accept();
                     WAMPlayer play = new WAMPlayer(socket);
-                    playerArray[player] = play;
-                    play.welcome(row,column,players,player);
-                    System.out.println("Player "+player+1+"is Connected!");
+                    playerArray[playerNo] = play;
+                    play.welcome(row,column,players,playerNo);
+                    System.out.println("Player "+playerNo+1+" is Connected!");
             }
             System.out.println("Starting game!");
             WAMGame game = new WAMGame(row, column, playerArray, gameDuration);

@@ -15,9 +15,6 @@ public class WAMBoard {
     // The list of each GUI observing the board's changes
     private List<Observer<WAMBoard>> observers;
 
-    // All of the players' scores
-    private int[] scores;
-
     // The array of holes indexed by ID
     private Hole[] holes;
 
@@ -32,6 +29,9 @@ public class WAMBoard {
 
     // Which player this currently is
     private int playerNo;
+
+    //The Score of the Player
+    private int score;
 
     /**
      * All the different statuses that the game could be in.
@@ -55,7 +55,7 @@ public class WAMBoard {
      * Each hole is either empty or occupied by a mole.
      */
     public enum Hole {
-        EMPTY, OCCUPIED;
+        EMPTY, OCCUPIED
     }
 
     // What the status currently is
@@ -134,7 +134,7 @@ public class WAMBoard {
      * @param newScore the new score that changed
      */
     public void updateScore(int[] newScore) {
-        scores = newScore;
+        this.score = newScore[playerNo];
         alertObservers();
     }
 
@@ -156,10 +156,7 @@ public class WAMBoard {
      */
     public void initializeBoard(int rows, int columns, int players,
                                 int playerNo) {
-        this.scores = new int[players];
-        for (int score: scores){
-            score = 0;
-        }
+        this.score = 0;
         this.rows = rows;
         this.columns = columns;
         this.playerNo = playerNo;
