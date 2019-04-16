@@ -70,54 +70,22 @@ public class WAMGame implements Runnable{
 
     @Override
     public void run() {
-
+        Thread[][] threads = new Thread[wam.getRow()][wam.getColumn()];
         long endTime = System.currentTimeMillis() + gameDuration*1000;
-
-        while (System.currentTimeMillis() < endTime) {
-//            Thread[][] threads = new Thread[wam.getRow()][wam.getColumn()];
-//            for(int i = 0; i< wam.getRow();i++){
-//                for (int j = 0; j<wam.getColumn();j++){
-//                    threads[i][j] = new Thread(new HandleMoles(this.wam,getHoleNumFromRowAndCol(i,j),this.players));
-//                }
-//            }
-//
-//            for (int i = 0; i < wam.getRow(); i++) {
-//                for (int j = 0; j < wam.getColumn(); j++) {
-//                    threads[i][j].start();
-//                }
-//            }
-
-//            Thread thread = new Thread(new HandleMoles(this.wam, getHoleNumFromRowAndCol(0,0), this.players));
-//            thread.start();
-//TODO Figure out how to pop up multiple Moles at the Same time
-
-
-
-
-
-
-
-
-
-
-
-//            int[] pos = wam.chooseRandomSlot();
-//            wam.popOut(pos[0],pos[1]);
-//            informPlayers(true, pos[0], pos[1]);
-//
-//            while (System.currentTimeMillis() < wam.getRandomUpTime()*1000) {
-//
-//                System.out.println("MOLE is UP");
-//            }
-//
-//            wam.popIn(pos[0],pos[1]);
-//            informPlayers(false, pos[0], pos[1]);
-//
-//            while (System.currentTimeMillis() < wam.getRandomDownTime()) {
-//                System.out.println("MOLE is Down");
-//            }
+        for(int i = 0; i < wam.getRow();i++){
+            for(int j = 0; j < wam.getColumn(); j++){
+                threads[i][j] = new Thread(new Mole(this.wam, i,j));
+            }
         }
-        //For now all the players get a tie.
+        while (System.currentTimeMillis() < endTime) {
+            for (int i = 0; i < wam.getRow(); i++) {
+                for (int j = 0; j < wam.getColumn(); j++) {
+                    threads[i][j].start();
+                }
+            }
+            //TODO Figure out how to pop up multiple Moles at the Same time
+
+        }
         System.out.println("Game Over");
         closeAll();
      }

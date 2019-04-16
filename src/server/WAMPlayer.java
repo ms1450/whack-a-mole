@@ -40,6 +40,17 @@ public class WAMPlayer implements WAMProtocol, Closeable {
         }
     }
 
+    public int whack(){
+        String response = scanner.nextLine();
+        String[] args = response.trim().split(" ");
+        if(args[0].equals(WHACK)){
+            return Integer.parseInt(args[1]);
+        }
+        else{
+            return Integer.parseInt(null);
+        }
+    }
+
     /**
      * Method that sends out the welcome message to the Client
      * @param row Number of rows
