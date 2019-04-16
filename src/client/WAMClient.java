@@ -214,6 +214,7 @@ public class WAMClient {
         while (this.goodToGo()) {
             try {
                 String request = this.networkIn.next();
+                //System.out.println(request);
                 String arguments = this.networkIn.nextLine().trim();
                 WAMClient.dPrint( "Net message in = \"" + request + '"' );
                 //System.out.println(request+arguments);

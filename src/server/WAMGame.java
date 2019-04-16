@@ -8,22 +8,6 @@ public class WAMGame implements Runnable{
     private WAM wam;
     private int gameDuration;
 
-    public void moleUpTime(){
-        try {
-            Thread.sleep(wam.getRandomUpTime());
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void moleDownTime(){
-        try {
-            Thread.sleep(wam.getRandomDownTime());
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
     public WAMGame(int row, int column, WAMPlayer[] players, int gameDuration){
         this.players = players;
         this.wam = new WAM(row, column);
@@ -67,6 +51,33 @@ public class WAMGame implements Runnable{
         }
     }
 
+    private void whackCheck(){
+        for(WAMPlayer player:players){
+            int[] val = new int[2];
+            if(0 == player.whack()){
+                val = holeNoToRowAndColumn(player.whack());
+            }
+            if (wam.checkIfMole(val[0],val[1])){
+                player.scoreUp();
+            }
+            else {
+                player.scoreDown();
+            }
+        }
+    }
+
+    private int[] holeNoToRowAndColumn(int hole){
+        int rowNum = 0;
+        int colNum = 0;
+        int maxRow = 3;
+        while(hole>maxRow){
+            hole -= maxRow+1;
+            rowNum ++;
+        }
+        colNum = hole;
+        return new int[]{rowNum,colNum};
+    }
+
 
     @Override
     public void run() {
@@ -83,6 +94,8 @@ public class WAMGame implements Runnable{
                     threads[i][j].start();
                 }
             }
+            whackCheck();
+
             //TODO Figure out how to pop up multiple Moles at the Same time
 
         }

@@ -9,10 +9,13 @@ public class Mole implements Runnable {
         this.rowNo = rowNo;
         this.colNo = colNo;
     }
+
+
     @Override
     public void run(){
         try{
             while (true){
+
                 Thread.sleep(wam.getRandomDownTime());
                 wam.popOut(rowNo,colNo);
                 Thread.sleep(wam.getRandomUpTime());

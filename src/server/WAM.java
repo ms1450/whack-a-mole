@@ -67,22 +67,18 @@ public class WAM {
         }
     }
 
-    //Chooses a random Row and Column Number
-    public int[] chooseRandomSlot(){
-        Random r = new Random();
-        int rowVal = r.nextInt(row);
-        int colVal = r.nextInt(column);
-        return new int[] {rowVal, colVal};
+    public boolean checkIfMole(int row, int column){
+        return board[row][column].equals(Hole.OCCUPIED);
     }
 
     public int getRandomUpTime(){
         Random r = new Random();
-        return r.nextInt((5 - 3) + 1) + 3;
+        return r.nextInt(((5 - 3) + 1) + 3)*1000;
     }
 
     public int getRandomDownTime(){
         Random r = new Random();
-        return r.nextInt((8 - 2)+ 1)+2;
+        return r.nextInt(((8 - 2)+ 1)+2)*1000;
     }
 
 }

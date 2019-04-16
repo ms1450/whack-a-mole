@@ -39,6 +39,13 @@ public class WAMPlayer implements WAMProtocol, Closeable {
             throw new WAMException(e);
         }
     }
+    public void scoreUp(){
+        this.score += 2;
+    }
+
+    public void scoreDown(){
+        this.score -= 1;
+    }
 
     public int whack(){
         String response = scanner.nextLine();
