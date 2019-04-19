@@ -9,10 +9,16 @@ import java.util.Random;
 public class WAM {
     //The board with its rows and columns
     private Hole[][] board;
+    //rows in the board
     public int row;
+    //columns in the board
     public int column;
 
-    //Init for the Board
+    /**
+     * Constructor for the WAM
+     * @param row rows of the board
+     * @param column columns of the board
+     */
     public WAM(int row, int column){
         this.row = row;
         this.column = column;
@@ -24,12 +30,20 @@ public class WAM {
         }
     }
 
-    //WAMGame will send this to the instance to pop out a Mole.
+    /**
+     * Pops out a mole on the Board
+     * @param row row number
+     * @param col column number
+     */
     public void popOut(int row, int col){
         board[row][col] = Hole.OCCUPIED;
     }
 
-    //WAMGame will send this to the instance to pop in a Mole.
+    /**
+     * Downs a mole on the Board
+     * @param row row number
+     * @param col column number
+     */
     public void popIn(int row, int col){
         board[row][col] = Hole.EMPTY;
     }
@@ -45,16 +59,26 @@ public class WAM {
 //        }
 //    }
 
+    /**
+     * Get the Rows
+     * @return rows
+     */
     public int getRow(){
         return row;
     }
 
+    /**
+     * Get the Columns
+     * @return columns
+     */
     public int getColumn(){
         return column;
     }
 
 
-    //ENUM to show two states of the hole, occupied and empty.
+    /**
+     * Represents a single Hole on the Board.
+     */
     public enum Hole{
         EMPTY('O'),
         OCCUPIED('X');
@@ -67,15 +91,29 @@ public class WAM {
         }
     }
 
+    /**
+     * Checks if a Board has a Mole up
+     * @param row row number
+     * @param column column number
+     * @return true if it is occupied and false if not.
+     */
     public boolean checkIfMole(int row, int column){
         return board[row][column].equals(Hole.OCCUPIED);
     }
 
+    /**
+     * Returns a random value between 5000 and 3000
+     * @return integer
+     */
     public int getRandomUpTime(){
         Random r = new Random();
         return r.nextInt(((5 - 3) + 1) + 3)*1000;
     }
 
+    /**
+     * Returns a random value between 8000 and 2000
+     * @return integer
+     */
     public int getRandomDownTime(){
         Random r = new Random();
         return r.nextInt(((8 - 2)+ 1)+2)*1000;

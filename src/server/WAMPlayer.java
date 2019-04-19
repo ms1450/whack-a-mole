@@ -39,22 +39,33 @@ public class WAMPlayer implements WAMProtocol, Closeable {
             throw new WAMException(e);
         }
     }
+
+    /**
+     * Method that adds the Score by 2
+     */
     public void scoreUp(){
         this.score += 2;
     }
 
+    /**
+     * Method that subtracts the score by 1
+     */
     public void scoreDown(){
         this.score -= 1;
     }
 
+    /**
+     * Method that returns 0 if no whacks and the hole number +1 if whacked.
+     * @return
+     */
     public int whack(){
         String response = scanner.nextLine();
         String[] args = response.trim().split(" ");
         if(args[0].equals(WHACK)){
-            return Integer.parseInt(args[1]);
+            return Integer.parseInt(args[1])+1;
         }
         else{
-            return Integer.parseInt(null);
+            return 0;
         }
     }
 

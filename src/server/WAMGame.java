@@ -8,12 +8,25 @@ public class WAMGame implements Runnable{
     private WAM wam;
     private int gameDuration;
 
+    /**
+     * Constructor to Create the Game
+     * @param row Rows of the Board
+     * @param column Columns of the Board
+     * @param players Number of Players Playing the Game
+     * @param gameDuration Duration for which the Game will last
+     */
     public WAMGame(int row, int column, WAMPlayer[] players, int gameDuration){
         this.players = players;
         this.wam = new WAM(row, column);
         this.gameDuration = gameDuration;
     }
 
+    /**
+     * Method that retrieves a hole number from row and columns.
+     * @param row Row Number
+     * @param col Column Number
+     * @return Hole Number
+     */
     public int getHoleNumFromRowAndCol(int row, int col){
         int rowTotal = wam.getRow();
         int colTotal = wam.getColumn();
@@ -31,6 +44,12 @@ public class WAMGame implements Runnable{
         return counter;
     }
 
+    /**
+     * Used to inform players if a Mole is Up or Down
+     * @param state true if mole is up and false if mole is down
+     * @param row row number
+     * @param col column number
+     */
     public void informPlayers(boolean state, int row, int col){
         if(state){
             for(WAMPlayer p: players){
@@ -44,13 +63,20 @@ public class WAMGame implements Runnable{
         }
     }
 
+    /**
+     * closes the Game
+     */
     public void closeAll(){
         for(WAMPlayer player: players){
+            //TODO calculate the Scores and send players messages.
             player.gameTied();
             player.close();
         }
     }
 
+    /**
+     * Checks if a Whack has been made
+     */
     private void whackCheck(){
         for(WAMPlayer player:players){
             int[] val = new int[2];
@@ -66,6 +92,11 @@ public class WAMGame implements Runnable{
         }
     }
 
+    /**
+     * Method that retrieves the row and column number from the Hole Number
+     * @param hole hole number
+     * @return array with row and column
+     */
     private int[] holeNoToRowAndColumn(int hole){
         int rowNum = 0;
         int colNum = 0;
@@ -79,13 +110,16 @@ public class WAMGame implements Runnable{
     }
 
 
+    /**
+     * Thread run Method
+     */
     @Override
     public void run() {
         Thread[][] threads = new Thread[wam.getRow()][wam.getColumn()];
         long endTime = System.currentTimeMillis() + gameDuration*1000;
         for(int i = 0; i < wam.getRow();i++){
             for(int j = 0; j < wam.getColumn(); j++){
-                threads[i][j] = new Thread(new Mole(this.wam, i,j));
+                //TODO - Thread for each Hole runs here
             }
         }
         while (System.currentTimeMillis() < endTime) {
