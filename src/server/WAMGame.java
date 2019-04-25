@@ -77,20 +77,20 @@ public class WAMGame implements Runnable{
     /**
      * Checks if a Whack has been made
      */
-    private void whackCheck(){
-        for(WAMPlayer player:players){
-            int[] val = new int[2];
-            if(0 == player.whack()){
-                val = holeNoToRowAndColumn(player.whack());
-            }
-            if (wam.checkIfMole(val[0],val[1])){
-                player.scoreUp();
-            }
-            else {
-                player.scoreDown();
-            }
-        }
-    }
+//    private void whackCheck(){
+//        for(WAMPlayer player:players){
+//            int[] val = new int[2];
+//            if(0 == player.whack()){
+//                val = holeNoToRowAndColumn(player.whack());
+//            }
+//            if (wam.checkIfMole(val[0],val[1])){
+//                player.scoreUp();
+//            }
+//            else {
+//                player.scoreDown();
+//            }
+//        }
+//    }
 
     /**
      * Method that retrieves the row and column number from the Hole Number
@@ -117,19 +117,20 @@ public class WAMGame implements Runnable{
     public void run() {
         Thread[][] threads = new Thread[wam.getRow()][wam.getColumn()];
         long endTime = System.currentTimeMillis() + gameDuration*1000;
-        for(int i = 0; i < wam.getRow();i++){
-            for(int j = 0; j < wam.getColumn(); j++){
-                //TODO - Thread for each Hole runs here
-            }
-        }
         while (System.currentTimeMillis() < endTime) {
+            for(int i = 0; i < wam.getRow();i++){
+                for(int j = 0; j < wam.getColumn(); j++){
+                    threads[i][j] = new Thread(new Mole(wam, i , j, this));
+                    System.out.println(" Creating Thread "+ i + " , " + j);
+                }
+            }
             for (int i = 0; i < wam.getRow(); i++) {
                 for (int j = 0; j < wam.getColumn(); j++) {
                     threads[i][j].start();
+                    System.out.println(" Running Thread " + i + " , " + j);
                 }
             }
-            whackCheck();
-
+            //whackCheck();
             //TODO Figure out how to pop up multiple Moles at the Same time
 
         }

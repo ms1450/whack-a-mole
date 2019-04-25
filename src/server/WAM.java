@@ -10,21 +10,21 @@ public class WAM {
     //The board with its rows and columns
     private Hole[][] board;
     //rows in the board
-    public int row;
+    public final int ROWS;
     //columns in the board
-    public int column;
+    public final int COLUMNS;
 
     /**
      * Constructor for the WAM
-     * @param row rows of the board
-     * @param column columns of the board
+     * @param ROWS rows of the board
+     * @param COLUMNS columns of the board
      */
-    public WAM(int row, int column){
-        this.row = row;
-        this.column = column;
-        board = new Hole[row][column];
-        for(int col=0; col<column; col++) {
-            for(int r=0; r < row; row++) {
+    public WAM(int ROWS, int COLUMNS){
+        this.ROWS = ROWS;
+        this.COLUMNS = COLUMNS;
+        board = new Hole[ROWS][COLUMNS];
+        for(int col=0; col<COLUMNS; col++) {
+            for(int r=0; r < ROWS; r++) {
                 board[col][r] = Hole.EMPTY;
             }
         }
@@ -64,7 +64,7 @@ public class WAM {
      * @return rows
      */
     public int getRow(){
-        return row;
+        return ROWS;
     }
 
     /**
@@ -72,7 +72,7 @@ public class WAM {
      * @return columns
      */
     public int getColumn(){
-        return column;
+        return COLUMNS;
     }
 
 
@@ -105,7 +105,7 @@ public class WAM {
      * Returns a random value between 5000 and 3000
      * @return integer
      */
-    public int getRandomUpTime(){
+    public long getRandomUpTime(){
         Random r = new Random();
         return r.nextInt(((5 - 3) + 1) + 3)*1000;
     }
@@ -114,7 +114,7 @@ public class WAM {
      * Returns a random value between 8000 and 2000
      * @return integer
      */
-    public int getRandomDownTime(){
+    public long getRandomDownTime(){
         Random r = new Random();
         return r.nextInt(((8 - 2)+ 1)+2)*1000;
     }
