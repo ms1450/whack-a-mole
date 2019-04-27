@@ -104,7 +104,7 @@ public class WAMGame implements Runnable{
     public void closeAll(){
         ArrayList<WAMPlayer> winners = scoreWinner()[0];
         if(winners.size() > 1){
-            for(WAMPlayer player: players){
+            for(WAMPlayer player: winners){
                 player.gameTied();
                 player.close();
             }

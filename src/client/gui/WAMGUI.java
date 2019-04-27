@@ -8,11 +8,12 @@ import common.WAMException;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -33,6 +34,9 @@ public class WAMGUI extends Application implements Observer<WAMBoard> {
     private WAMBoard board;
     // All of the holes that are displayed on the GUI
     private GridPane holes;
+
+    private StackPane guiBoard;
+
     //VBOX that holds the Scores for the Player
     private VBox scores;
     //The status of the Game
@@ -121,22 +125,37 @@ public class WAMGUI extends Application implements Observer<WAMBoard> {
         createScores();
 
         gameStatus = new Label();
-        gameStatus.setFont(Font.font(30));
+        gameStatus.setFont(Font.font(10*board.getColumns() + 10*board.getRows()));
+        gameStatus.setTextFill(Color.WHITE);
 
-        Insets insets = new Insets(50);
+        ImageView grass = new ImageView(getClass().getResource("grass" +
+                ".jpg").toExternalForm());
+        grass.setFitWidth(140*board.getColumns());
+        grass.setFitHeight(140*board.getRows());
+
+        Rectangle darkenGame = new Rectangle(140*board.getColumns(),
+                140*board.getRows());
+        darkenGame.setFill(Color.BLACK);
+        darkenGame.setOpacity(.7);
+
+        guiBoard = new StackPane();
+        guiBoard.getChildren().addAll(grass, holes, darkenGame, gameStatus);
+        guiBoard.getChildren().get(2).setVisible(false);
 
         window = new BorderPane();
-        window.setCenter(holes);
+        window.setCenter(guiBoard);
         window.setRight(scores);
-        window.setBottom(gameStatus);
-        BorderPane.setAlignment(gameStatus, Pos.BOTTOM_CENTER);
-        BorderPane.setMargin(scores, insets);
+
+        Insets scoreInset = new Insets(15);
+        Insets holeInset = new Insets(10);
+        BorderPane.setMargin(scores, scoreInset);
+        StackPane.setMargin(holes, holeInset);
 
         scene = new Scene(window);
 
         stage.setScene(scene);
         stage.setResizable(false);
-        stage.setTitle("Whack-A-Mole");
+        stage.setTitle("Whack-A-Mole Player #" + (board.getPlayerNo()+1));
         stage.show();
 
         client.startListener();
@@ -157,19 +176,22 @@ public class WAMGUI extends Application implements Observer<WAMBoard> {
             }
         }
 
-        // TODO change this to better form with only the score part getting
-        //  changed each time
         for (int i = 0; i < board.getScores().length; i++){
             ((Text) ((HBox) scores.getChildren().get(i)).getChildren().get(1)).setText(Integer.toString(board.getScores()[i]));
         }
+
         if (board.getStatus() == WAMBoard.Status.I_WON){
             gameStatus.setText("You Won.");
+            guiBoard.getChildren().get(2).setVisible(true);
         } else if(board.getStatus() == WAMBoard.Status.I_LOST){
             gameStatus.setText("You Lost.");
+            guiBoard.getChildren().get(2).setVisible(true);
         } else if (board.getStatus() == WAMBoard.Status.TIE){
             gameStatus.setText("You Tied.");
+            guiBoard.getChildren().get(2).setVisible(true);
         } else if (board.getStatus() == WAMBoard.Status.ERROR) {
             gameStatus.setText("ERROR");
+            guiBoard.getChildren().get(2).setVisible(true);
         }
 
     }
