@@ -16,23 +16,9 @@ public class PlayerWHACKChecker extends Thread {
         this.game = game;
     }
 
-    private int[] holeNoToRowAndColumn(int hole){
-        int rowNum = 0;
-        int colNum = 0;
-        int maxRow = wam.ROWS;
-        while(hole>maxRow){
-            hole -= maxRow;
-            rowNum ++;
-        }
-        colNum = hole;
-        System.out.println("HOLE NUMBER "+hole);
-        System.out.println(rowNum +" "+ colNum);
-        return new int[]{0,0};
-    }
-
-    public synchronized void correct() throws WAMException {
+    public synchronized void correct(int holeNo) throws WAMException {
         player.scoreUp();
-        int holeNo = player.whack();
+
         game.informPlayers(false, holeNo);
     }
 
@@ -43,10 +29,13 @@ public class PlayerWHACKChecker extends Thread {
                 if(player.hasWhack()){
                     int holeNo = player.whack();
                     if(wam.checkIfMole(holeNo)){
-                        correct();
+                        correct(holeNo);
                     }
                     else {
                         player.scoreDown();
+                    }
+                    for (WAMPlayer player: game.getPlayers()) {
+                        player.scores(game.getPlayers());
                     }
                 }
                 else{
@@ -55,7 +44,6 @@ public class PlayerWHACKChecker extends Thread {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    player.scores(game.getPlayers());
                 }
             } catch (WAMException e) {
                 e.printStackTrace();

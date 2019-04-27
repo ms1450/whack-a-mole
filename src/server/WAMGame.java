@@ -1,6 +1,5 @@
 package server;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -132,7 +131,7 @@ public class WAMGame implements Runnable{
 
         }
         for(WAMPlayer player:players){
-            new Thread(new PlayerWHACKChecker(player,wam,gameDuration,this)).start();
+            new Thread(new PlayerWHACKChecker(player, wam, gameDuration,this)).start();
         }
         //Starts those moles in a gap of 1 second to avoid overcrowding.
         //TODO Fix the Timings (Shouldnt be a Major issue , Works as is.)

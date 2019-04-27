@@ -28,16 +28,16 @@ public class Mole extends Thread{
     public void run() {
         while (System.currentTimeMillis() < endTime) {
 
-            System.out.println("Mole " + holeNo + " started");
-            game.informPlayers(true, holeNo);
-            try {
-                Thread.sleep(game.getRandomUptime());
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
             game.informPlayers(false, holeNo);
             try {
                 Thread.sleep(game.getRandomDowntime());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            game.informPlayers(true, holeNo);
+            try {
+                Thread.sleep(game.getRandomUptime());
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

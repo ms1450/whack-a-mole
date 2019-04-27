@@ -154,7 +154,7 @@ public class WAMGUI extends Application implements Observer<WAMBoard> {
         // TODO change this to better form with only the score part getting
         //  changed each time
         for (int i = 0; i < board.getScores().length; i++){
-            ((Text) scores.getChildren().get(i)).setText("Player #" + (board.getPlayerNo()+1) + ": " + board.getScores()[i]);
+            ((Text) scores.getChildren().get(i)).setText("Player #" + board.getPlayerNo() + ": " + board.getScores()[i]);
         }
 
         if (board.getStatus() == WAMBoard.Status.I_WON){

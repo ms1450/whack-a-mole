@@ -93,7 +93,7 @@ public class WAMPlayer implements WAMProtocol, Closeable {
         this.score = scores.get(playerNo).getScore();
         String s = "";
         for(WAMPlayer player:scores){
-            s = s + " " + player.getScore();
+            s = s + player.getScore() + " ";
         }
         printer.println(SCORE + " " + s);
     }

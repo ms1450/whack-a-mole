@@ -90,18 +90,18 @@ public class WAM {
      * Returns a random value between 5000 and 3000
      * @return integer
      */
-    public long getRandomUpTime(){
+    public int getRandomUpTime(){
         Random r = new Random();
-        return r.nextInt(((5 - 3) + 1) + 3)*1000;
+        return (r.nextInt(3) + 3)*1000 ;
     }
 
     /**
-     * Returns a random value between 8000 and 2000
+     * Returns a random value between 10000 and 2000
      * @return integer
      */
-    public long getRandomDownTime(){
+    public int getRandomDownTime(){
         Random r = new Random();
-        return r.nextInt(((8 - 2)+ 1)+2)*1000;
+        return (r.nextInt(9) + 2)*1000;
     }
 
 }
