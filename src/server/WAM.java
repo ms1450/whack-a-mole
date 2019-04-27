@@ -35,7 +35,7 @@ public class WAM {
      * @param row row number
      * @param col column number
      */
-    public void popOut(int row, int col){
+    public void moleUp(int row, int col){
         board[row][col] = Hole.OCCUPIED;
     }
 
@@ -44,7 +44,7 @@ public class WAM {
      * @param row row number
      * @param col column number
      */
-    public void popIn(int row, int col){
+    public void moleDown(int row, int col){
         board[row][col] = Hole.EMPTY;
     }
 

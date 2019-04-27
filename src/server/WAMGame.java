@@ -52,15 +52,25 @@ public class WAMGame implements Runnable{
      */
     public void informPlayers(boolean state, int row, int col){
         if(state){
+            wam.moleUp(row,col);
             for(WAMPlayer p: players){
                 p.moleUp(getHoleNumFromRowAndCol(row,col));
             }
         }
         else{
+            wam.moleDown(row,col);
             for(WAMPlayer p: players){
                 p.moleDown(getHoleNumFromRowAndCol(row,col));
             }
         }
+    }
+
+    public long getRandomUptime(){
+        return wam.getRandomUpTime();
+    }
+
+    public long getRandomDowntime(){
+        return wam.getRandomDownTime();
     }
 
     /**
@@ -115,25 +125,16 @@ public class WAMGame implements Runnable{
      */
     @Override
     public void run() {
-        Thread[][] threads = new Thread[wam.getRow()][wam.getColumn()];
-        long endTime = System.currentTimeMillis() + gameDuration*1000;
-        while (System.currentTimeMillis() < endTime) {
-            for(int i = 0; i < wam.getRow();i++){
-                for(int j = 0; j < wam.getColumn(); j++){
-                    threads[i][j] = new Thread(new Mole(wam, i , j, this));
-                    System.out.println(" Creating Thread "+ i + " , " + j);
-                }
-            }
+        long endTime = System.currentTimeMillis() + gameDuration;
+        while(System.currentTimeMillis() < endTime){
             for (int i = 0; i < wam.getRow(); i++) {
                 for (int j = 0; j < wam.getColumn(); j++) {
-                    threads[i][j].start();
-                    System.out.println(" Running Thread " + i + " , " + j);
+                    new Thread(new Mole(i, j, this)).start();
                 }
             }
-            //whackCheck();
-            //TODO Figure out how to pop up multiple Moles at the Same time
-
         }
+        //whackCheck();
+        //TODO Figure out how to pop up multiple Moles at the Same time
         System.out.println("Game Over");
         closeAll();
      }

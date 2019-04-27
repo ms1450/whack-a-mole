@@ -77,7 +77,7 @@ public class WAMServer implements WAMProtocol ,Runnable {
                     System.out.println("Player "+playerNo+1+" is Connected!");
             }
             System.out.println("Starting game!");
-            WAMGame game = new WAMGame(row, column, playerArray, gameDuration);
+            WAMGame game = new WAMGame(row, column, playerArray, gameDuration*1000);
             // server is not multithreaded
             new Thread(game).run();
         } catch (IOException e) {
