@@ -8,7 +8,7 @@ import java.util.Random;
  */
 public class WAM {
     //The board with its rows and columns
-    private Hole[][] board;
+    private Hole[] board;
     //rows in the board
     public final int ROWS;
     //columns in the board
@@ -22,42 +22,28 @@ public class WAM {
     public WAM(int ROWS, int COLUMNS){
         this.ROWS = ROWS;
         this.COLUMNS = COLUMNS;
-        board = new Hole[ROWS][COLUMNS];
-        for(int col=0; col<COLUMNS; col++) {
-            for(int r=0; r < ROWS; r++) {
-                board[col][r] = Hole.EMPTY;
-            }
+        board = new Hole[ROWS * COLUMNS];
+        for(int i = 0; i < board.length; i++) {
+            board[i] = Hole.EMPTY;
         }
     }
 
     /**
      * Pops out a mole on the Board
-     * @param row row number
-     * @param col column number
+     *
      */
-    public void moleUp(int row, int col){
-        board[row][col] = Hole.OCCUPIED;
+    public void moleUp(int holeNo){
+        board[holeNo] = Hole.OCCUPIED;
     }
 
     /**
      * Downs a mole on the Board
-     * @param row row number
-     * @param col column number
+     *
      */
-    public void moleDown(int row, int col){
-        board[row][col] = Hole.EMPTY;
+    public void moleDown(int holeNo){
+        board[holeNo] = Hole.EMPTY;
     }
 
-    //WAMGame will send this to the instance when the mole gets whacked and once whacked the mole will go back.
-//    public int whack(int row, int col){
-//        if(board[row][col].equals(Hole.OCCUPIED)){
-//            board[row][col] = Hole.EMPTY;
-//            return 2;
-//        }
-//        else{
-//            return -1;
-//        }
-//    }
 
     /**
      * Get the Rows
@@ -93,12 +79,11 @@ public class WAM {
 
     /**
      * Checks if a Board has a Mole up
-     * @param row row number
-     * @param column column number
+     *
      * @return true if it is occupied and false if not.
      */
-    public boolean checkIfMole(int row, int column){
-        return board[row][column].equals(Hole.OCCUPIED);
+    public boolean checkIfMole(int holeNo){
+        return board[holeNo].equals(Hole.OCCUPIED);
     }
 
     /**

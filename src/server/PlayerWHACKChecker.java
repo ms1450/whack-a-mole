@@ -32,8 +32,8 @@ public class PlayerWHACKChecker extends Thread {
 
     public synchronized void correct() throws WAMException {
         player.scoreUp();
-        int[] val = holeNoToRowAndColumn(player.whack());
-        game.informPlayers(false,val[0],val[1]);
+        int holeNo = player.whack();
+        game.informPlayers(false, holeNo);
     }
 
     public void run(){
@@ -41,8 +41,8 @@ public class PlayerWHACKChecker extends Thread {
         while (System.currentTimeMillis() < end){
             try {
                 if(player.hasWhack()){
-                    int[] val = holeNoToRowAndColumn(player.whack());
-                    if(wam.checkIfMole(val[0],val[1])){
+                    int holeNo = player.whack();
+                    if(wam.checkIfMole(holeNo)){
                         correct();
                     }
                     else {

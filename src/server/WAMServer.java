@@ -58,7 +58,8 @@ public class WAMServer implements WAMProtocol ,Runnable {
         int column = Integer.parseInt(args[2]);
         int players = Integer.parseInt(args[3]);
         int gameDuration = Integer.parseInt(args[4]);
-        WAMServer server = new WAMServer(port,row,column,players,gameDuration);
+        WAMServer server = new WAMServer(port,row,column,players,
+                gameDuration*1000);
         server.run();
     }
 

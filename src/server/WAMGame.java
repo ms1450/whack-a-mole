@@ -1,11 +1,21 @@
 package server;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+
 /**
- * The actual class where the Game runs.
+ * The actual implementation of the Game.
+ * This controls the Mole Up and Down movement as well as calculates any scores.
+ * @author Mehul Sen
+ * @author Dade Wood
  */
 public class WAMGame implements Runnable{
+    //Array of Players
     private WAMPlayer[] players;
+    //Wam Board
     private WAM wam;
+    //Duration the Game will last for
     private int gameDuration;
 
     /**
@@ -21,119 +31,125 @@ public class WAMGame implements Runnable{
         this.gameDuration = gameDuration;
     }
 
-    /**
-     * Method that retrieves a hole number from row and columns.
-     * @param row Row Number
-     * @param col Column Number
-     * @return Hole Number
-     */
-    public int getHoleNumFromRowAndCol(int row, int col){
-        int rowTotal = wam.getRows();
-        int colTotal = wam.getColumns();
-        int rowCounter = 0;
-        int colCounter = 0;
-        int counter = 0;
-        while(rowCounter < row){
-            counter += colTotal + 1;
-            rowCounter ++;
-        }
-        while(colCounter < col){
-            counter += 1;
-            colCounter ++;
-        }
-        return counter;
+    public ArrayList<WAMPlayer> getPlayers(){
+        return new ArrayList<>(Arrays.asList(players));
     }
 
     /**
-     * Used to inform players if a Mole is Up or Down
+     * Used to inform players if a Mole is Up or Down as well as update the Board
      * @param state true if mole is up and false if mole is down
-     * @param row row number
-     * @param col column number
+     *
      */
-    public void informPlayers(boolean state, int row, int col){
+    public void informPlayers(boolean state, int holeNo){
         if(state){
+            wam.moleUp(holeNo);
             for(WAMPlayer p: players){
-                p.moleUp(getHoleNumFromRowAndCol(row,col));
+                p.moleUp(holeNo);
             }
         }
         else{
+            wam.moleDown(holeNo);
             for(WAMPlayer p: players){
-                p.moleDown(getHoleNumFromRowAndCol(row,col));
+                p.moleDown(holeNo);
             }
         }
     }
 
     /**
-     * closes the Game
+     * the Up time for a Mole
+     * @return Random Up Time
+     */
+    public long getRandomUptime(){
+        return wam.getRandomUpTime();
+    }
+
+    /**
+     * the Down time for a Mole
+     * @return Random Mole Time
+     */
+    public long getRandomDowntime(){
+        return wam.getRandomDownTime();
+    }
+
+    /**
+     * Calculates the Scores and picks the winners and losers
+     * @return Array of winners and losers
+     */
+    public ArrayList<WAMPlayer>[] scoreWinner(){
+        ArrayList<WAMPlayer> winners = new ArrayList<>();
+        ArrayList<WAMPlayer> losers = new ArrayList<>();
+        int highestScore = 0;
+        for(WAMPlayer player: players){
+            if(highestScore < player.getScore()){
+                highestScore = player.getScore();
+            }
+        }
+        for (WAMPlayer player: players){
+            if(highestScore == player.getScore()){
+                winners.add(player);
+            }
+            else{
+                losers.add(player);
+            }
+        }
+        return new ArrayList[]{winners,losers};
+    }
+
+    /**
+     * closes the Game, sends win, lose and tie messages.
      */
     public void closeAll(){
-        for(WAMPlayer player: players){
-            //TODO calculate the Scores and send players messages.
-            player.gameTied();
+        ArrayList<WAMPlayer> winners = scoreWinner()[0];
+        if(winners.size() > 1){
+            for(WAMPlayer player: players){
+                player.gameTied();
+                player.close();
+            }
+        }
+        else{
+            winners.get(0).gameWon();
+            winners.get(0).close();
+        }
+        ArrayList<WAMPlayer> losers = scoreWinner()[1];
+        for(WAMPlayer player: losers) {
+            player.gameLost();
             player.close();
         }
     }
 
-    /**
-     * Checks if a Whack has been made
-     */
-    private void whackCheck(){
-        for(WAMPlayer player:players){
-            int[] val = new int[2];
-            if(0 == player.whack()){
-                val = holeNoToRowAndColumn(player.whack());
-            }
-            if (wam.checkIfMole(val[0],val[1])){
-                player.scoreUp();
-            }
-            else {
-                player.scoreDown();
-            }
-        }
-    }
 
     /**
-     * Method that retrieves the row and column number from the Hole Number
-     * @param hole hole number
-     * @return array with row and column
-     */
-    private int[] holeNoToRowAndColumn(int hole){
-        int rowNum = 0;
-        int colNum = 0;
-        int maxRow = 3;
-        while(hole>maxRow){
-            hole -= maxRow+1;
-            rowNum ++;
-        }
-        colNum = hole;
-        return new int[]{rowNum,colNum};
-    }
-
-
-    /**
-     * Thread run Method
+     * Thread run Method that runs the Moles.
      */
     @Override
     public void run() {
-        Thread[][] threads = new Thread[wam.getRows()][wam.getColumns()];
-        long endTime = System.currentTimeMillis() + gameDuration*1000;
-        for(int i = 0; i < wam.getRows();i++){
-            for(int j = 0; j < wam.getColumns(); j++){
-                //TODO - Thread for each Hole runs here
-            }
+        Thread[] threads = new Thread[wam.getRow()*wam.getColumn()];
+
+        //Creates the Threads for all the Moles
+        for (int i = 0; i < threads.length; i++) {
+                long endTime = System.currentTimeMillis() + gameDuration;
+                threads[i] = new Thread(new Mole(i, this, endTime));
+
         }
-        while (System.currentTimeMillis() < endTime) {
-            for (int i = 0; i < wam.getRows(); i++) {
-                for (int j = 0; j < wam.getColumns(); j++) {
-                    threads[i][j].start();
-                }
-            }
-            whackCheck();
+        for(WAMPlayer player:players){
+            new Thread(new PlayerWHACKChecker(player,wam,gameDuration,this)).start();
+        }
+        //Starts those moles in a gap of 1 second to avoid overcrowding.
+        //TODO Fix the Timings (Shouldnt be a Major issue , Works as is.)
+        for (Thread mole: threads) {
+            mole.start();
 
-            //TODO Figure out how to pop up multiple Moles at the Same time
 
+        }
+        try {
+            Thread.sleep(gameDuration);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
         System.out.println("Game Over");
+        //TODO Figure out a Way to Read Whack messages and update the score for each player.
         closeAll();
-     }
+    }
+
 }
+

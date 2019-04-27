@@ -119,25 +119,6 @@ public class WAMPlayer implements WAMProtocol, Closeable {
         else throw new WAMException(("Invalid Player Response"));
     }
 
-//    public int whack() throws WAMException {
-//        String response = scanner.nextLine();
-//
-//        if(response.startsWith(WHACK)) {
-//            String[] tokens = response.split(" ");
-//            if(tokens.length == 2) {
-//                return Integer.parseInt(tokens[1]);
-//            }
-//            else {
-//                throw new WAMException("Invalid player response: " +
-//                        response);
-//            }
-//        }
-//        else {
-//            throw new WAMException("Invalid player response: " +
-//                    response);
-//        }
-//    }
-
     /**
      * Sends the Game Won message to the Client.
      */
