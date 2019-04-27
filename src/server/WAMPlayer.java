@@ -152,7 +152,7 @@ public class WAMPlayer implements WAMProtocol, Closeable {
 
     /**
      * Send the error message to the Client.
-     * @param message
+     * @param message error message
      */
     public void error(String message) {
         printer.println(ERROR + " " + message);

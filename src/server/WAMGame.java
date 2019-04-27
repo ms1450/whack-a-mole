@@ -125,17 +125,25 @@ public class WAMGame implements Runnable{
      */
     @Override
     public void run() {
+        Thread[][] threads = new Thread[wam.getRow()][wam.getColumn()];
         long endTime = System.currentTimeMillis() + gameDuration;
-        while(System.currentTimeMillis() < endTime){
-            for (int i = 0; i < wam.getRow(); i++) {
+        for (int i = 0; i < wam.getRow(); i++) {
                 for (int j = 0; j < wam.getColumn(); j++) {
-                    new Thread(new Mole(i, j, this)).start();
+                    threads[i][j] = new Thread(new Mole(i,j,this));
                 }
             }
+        for(Thread[] thr:threads) for(Thread thread: thr){
+            thread.start();
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
+
         //whackCheck();
         //TODO Figure out how to pop up multiple Moles at the Same time
         System.out.println("Game Over");
-        closeAll();
+        //closeAll();
      }
 }

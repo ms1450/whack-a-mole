@@ -86,6 +86,7 @@ public class WAMClient {
             // Block waiting for the CONNECT message from the server.
             String request = this.networkIn.next();
             String arguments = this.networkIn.nextLine();
+            System.out.println(request+arguments);
             if (!request.equals(WELCOME)) {
                 throw new WAMException("Expected WELCOME from server");
             }
@@ -217,7 +218,7 @@ public class WAMClient {
                 //System.out.println(request);
                 String arguments = this.networkIn.nextLine().trim();
                 WAMClient.dPrint( "Net message in = \"" + request + '"' );
-                //System.out.println(request+arguments);
+                System.out.println(request+arguments);
                 switch ( request ) {
                     case SCORE:
                         scoresUpdate(arguments);
@@ -238,9 +239,11 @@ public class WAMClient {
                         gameTied();
                         break;
                     case ERROR:
+                        System.out.println("ERROR MESSAGE - "+request+ arguments);
                         error( arguments );
                         break;
                     default:
+                        System.out.println("ERROR MESSAGE - "+request+ arguments);
                         System.err.println("Unrecognized request: " + request);
                         this.stop();
                         break;
