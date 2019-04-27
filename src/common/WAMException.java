@@ -1,5 +1,10 @@
 package common;
 
+/**
+ * This class creates a personalized exception for the Game
+ * @author Dade Wood
+ * @author Mehul Sen
+ */
 public class WAMException extends Exception {
     /**
      * Convenience constructor to create a new {@link WAMException}

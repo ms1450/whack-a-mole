@@ -13,13 +13,16 @@ import static common.WAMProtocol.*;
 /**
  * The client takes messages from the server, modifies its version of the
  * WAMBoard and tells the view (GUI) to update.
- * @author Mehul Sen
  * @author Dade Wood
+ * @author Mehul Sen
  */
 public class WAMClient {
-
     private static final boolean DEBUG = false;
 
+    /**
+     * Method used for debugging
+     * @param logMsg object for log messages
+     */
     private static void dPrint( Object logMsg ) {
         if ( WAMClient.DEBUG ) {
             System.out.println( logMsg );
@@ -28,22 +31,18 @@ public class WAMClient {
 
     // The socket for this client
     private Socket clientSocket;
-
     // Takes in output from the server
     private Scanner networkIn;
-
     // Sends messages back to the server
     private PrintStream networkOut;
-
     // The board that this client is interacting with
     private WAMBoard board;
-
     // If the server is running
     private boolean go;
 
     /**
      * Checks if the client is good to run.
-     * @return
+     * @return true or false depending on whether it is good to go or not.
      */
     private synchronized boolean goodToGo() {
         return this.go;
@@ -83,10 +82,8 @@ public class WAMClient {
             this.board = board;
             this.go = true;
 
-            // Block waiting for the CONNECT message from the server.
             String request = this.networkIn.next();
             String arguments = this.networkIn.nextLine();
-            //System.out.println(request+arguments);
             if (!request.equals(WELCOME)) {
                 throw new WAMException("Expected WELCOME from server");
             }
@@ -102,7 +99,7 @@ public class WAMClient {
      * Tells the observer to start listening for updates.
      */
     public void startListener() {
-        new Thread(() -> this.run()).start();
+        new Thread(this::run).start();
     }
 
     /**
@@ -202,23 +199,21 @@ public class WAMClient {
             this.clientSocket.close();
         }
         catch( IOException ioe ) {
-            // squash
+            ioe.printStackTrace();
         }
         this.board.close();
     }
 
     /**
      * Depending on the message received from the server, the client will do
-     * various actions.
+     * various actions defined in the Switch case.
      */
     private void run() {
         while (this.goodToGo()) {
             try {
                 String request = this.networkIn.next();
-                //System.out.println(request);
                 String arguments = this.networkIn.nextLine().trim();
                 WAMClient.dPrint( "Net message in = \"" + request + '"' );
-                //System.out.println(request+arguments);
                 switch ( request ) {
                     case SCORE:
                         scoresUpdate(arguments);
@@ -250,7 +245,6 @@ public class WAMClient {
                 }
             }
             catch( NoSuchElementException nse ) {
-                // Looks like the connection shut down.
                 this.error( "Lost connection to server." );
                 this.stop();
             }

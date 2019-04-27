@@ -6,8 +6,8 @@ import java.util.Arrays;
 /**
  * The actual implementation of the Game.
  * This controls the Mole Up and Down movement as well as calculates any scores.
- * @author Mehul Sen
  * @author Dade Wood
+ * @author Mehul Sen
  */
 public class WAMGame implements Runnable{
     //Array of Players
@@ -30,6 +30,10 @@ public class WAMGame implements Runnable{
         this.gameDuration = gameDuration;
     }
 
+    /**
+     * Returns an ArrayList of the Players in the Game
+     * @return ArrayList of Players
+     */
     public ArrayList<WAMPlayer> getPlayers(){
         return new ArrayList<>(Arrays.asList(players));
     }
@@ -95,7 +99,7 @@ public class WAMGame implements Runnable{
     }
 
     /**
-     * closes the Game, sends win, lose and tie messages.
+     * Closes the Game, sends win, lose and tie messages.
      */
     public void closeAll(){
         ArrayList<WAMPlayer> winners = scoreWinner()[0];
@@ -116,37 +120,32 @@ public class WAMGame implements Runnable{
         }
     }
 
-
     /**
      * Thread run Method that runs the Moles.
      */
     @Override
     public void run() {
         Thread[] threads = new Thread[wam.getRow()*wam.getColumn()];
-
-        //Creates the Threads for all the Moles
+        //Creates the Threads for the Moles.
         for (int i = 0; i < threads.length; i++) {
                 long endTime = System.currentTimeMillis() + gameDuration;
                 threads[i] = new Thread(new Mole(i, this, endTime));
-
         }
+        //Creates the Threads for the Players
         for(WAMPlayer player:players){
             new Thread(new PlayerWHACKChecker(player, wam, gameDuration,this)).start();
         }
-        //Starts those moles in a gap of 1 second to avoid overcrowding.
-        //TODO Fix the Timings (Shouldnt be a Major issue , Works as is.)
+        //Starts the Mole Threads
         for (Thread mole: threads) {
             mole.start();
-
-
         }
+        //Sleeps the method for the duration of the Game
         try {
             Thread.sleep(gameDuration);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         System.out.println("Game Over");
-        //TODO Figure out a Way to Read Whack messages and update the score for each player.
         closeAll();
     }
 

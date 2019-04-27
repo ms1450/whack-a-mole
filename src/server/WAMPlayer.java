@@ -2,7 +2,6 @@ package server;
 
 import common.WAMProtocol;
 import common.WAMException;
-
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -12,8 +11,8 @@ import java.util.Scanner;
 
 /**
  * This class represents a Player in the Game.
- * @author Mehul Sen
  * @author Dade Wood
+ * @author Mehul Sen
  */
 public class WAMPlayer implements WAMProtocol, Closeable {
     //Socket belonging to the Client
@@ -44,14 +43,14 @@ public class WAMPlayer implements WAMProtocol, Closeable {
     }
 
     /**
-     * Method that adds the Score by 2
+     * Method that adds the score of the player by 2
      */
     public void scoreUp(){
         this.score += 2;
     }
 
     /**
-     * Method that subtracts the score by 1
+     * Method that subtracts the score of the player by 1
      */
     public void scoreDown(){
         this.score -= 1;
@@ -106,10 +105,19 @@ public class WAMPlayer implements WAMProtocol, Closeable {
         return score;
     }
 
-    public boolean hasWhack() throws WAMException{
+    /**
+     * Checks if the Player has sent out a WHACK message
+     * @return true if he has and false otherwise
+     */
+    public boolean hasWhack(){
         return scanner.hasNext();
     }
-    //TODO Hole Numbers are messeed UP
+
+    /**
+     * Reads the WHACK message sent out to determine the Hole Number
+     * @return The Hole Number in which the WHACK was sent out.
+     * @throws WAMException Exception in case of a wrong whack message.
+     */
     public int whack() throws WAMException{
         String response = scanner.nextLine();
         String[] tokens = response.trim().split(" ");
@@ -159,7 +167,7 @@ public class WAMPlayer implements WAMProtocol, Closeable {
             sock.close();
         }
         catch(IOException ioe) {
-            // squash
+            ioe.printStackTrace();
         }
     }
 }

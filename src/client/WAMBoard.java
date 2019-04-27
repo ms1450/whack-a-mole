@@ -11,37 +11,31 @@ import java.util.List;
  * @author Mehul Sen
  */
 public class WAMBoard {
-    // TODO Dade
-
     // The list of each GUI observing the board's changes
     private List<Observer<WAMBoard>> observers;
-
     // The array of holes indexed by ID
     private Hole[] holes;
-
     // Number of rows of the board
     private int rows;
-
     // Number of columns of the board
     private int columns;
-
-    // Number of players playing
-    private int players;
-
     // Which player this currently is
     private int playerNo;
-
     //The Score of the Player
     private int[] scores;
 
     /**
-     * All the different statuses that the game could be in.
+     * All the different statuses that the player playing the game could be in.
      */
     public enum Status {
         RUNNING, I_WON, I_LOST, TIE, ERROR;
 
         private String msg = null;
 
+        /**
+         * Sets the message for the Status.
+         * @param msg
+         */
         public void setMsg(String msg){this.msg = msg;}
 
         @Override
@@ -49,7 +43,6 @@ public class WAMBoard {
             return super.toString() +
                     this.msg == null ? "" : (this.msg);
         }
-
     }
 
     /**
@@ -58,8 +51,7 @@ public class WAMBoard {
     public enum Hole {
         EMPTY, OCCUPIED
     }
-
-    // What the status currently is
+    // The Current Status of the Game
     private Status status;
 
     /**
@@ -164,7 +156,6 @@ public class WAMBoard {
         this.rows = rows;
         this.columns = columns;
         this.playerNo = playerNo;
-        this.players = players;
         this.holes = new Hole[columns*rows];
         for (int i = 0; i < holes.length; i++){
             holes[i] = Hole.EMPTY;
@@ -177,7 +168,6 @@ public class WAMBoard {
      * @return EMPTY of the hole is empty or OCCUPIED if the hole is occupied
      */
     public Hole getContents(int index){
-        //System.out.println(index + " " + holes[index]);
         return this.holes[index];
     }
 
@@ -193,10 +183,22 @@ public class WAMBoard {
      */
     public int getColumns(){return this.columns;}
 
+    /**
+     * Returns an Array consisting of the Scores.
+     * @return Array with scores
+     */
     public int[] getScores(){return this.scores;}
 
+    /**
+     * Returns the Status of the Game
+     * @return status of the Game
+     */
     public Status getStatus(){return this.status;}
 
+    /**
+     * Returns the Player Number of the Player
+     * @return Player number
+     */
     public int getPlayerNo(){return this.playerNo;}
 
 
@@ -206,7 +208,6 @@ public class WAMBoard {
      */
     public WAMBoard(){
         this.observers = new LinkedList<>();
-
         this.status = Status.RUNNING;
     }
 }

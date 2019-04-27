@@ -2,12 +2,15 @@ package server;
 
 /**
  * Represents a Mole in The Board
- * @author Mehul Sen
  * @author Dade Wood
+ * @author Mehul Sen
  */
 public class Mole extends Thread{
+    //Hole Number for the Mole
     private int holeNo;
+    //Instance of the Game
     private WAMGame game;
+    //Duration till which this Thread should run
     private long endTime;
 
     /**
@@ -23,7 +26,7 @@ public class Mole extends Thread{
     }
 
     /**
-     * The actual working of the Mole, Runs till the the endTime is reached.
+     * The actual working of the Mole, this thread runs till the the endTime is reached.
      */
     public void run() {
         while (System.currentTimeMillis() < endTime) {

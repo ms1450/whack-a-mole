@@ -5,6 +5,8 @@ import java.util.Random;
 /**
  * This will act as the instance of the board.
  * It will be run by the WAMGame class.
+ * @author Dade Wood
+ * @author Mehul Sen
  */
 public class WAM {
     //The board with its rows and columns
@@ -29,21 +31,18 @@ public class WAM {
     }
 
     /**
-     * Pops out a mole on the Board
-     *
+     * Pops out a mole on the Board     *
      */
     public void moleUp(int holeNo){
         board[holeNo] = Hole.OCCUPIED;
     }
 
     /**
-     * Downs a mole on the Board
-     *
+     * Downs a mole on the Board     *
      */
     public void moleDown(int holeNo){
         board[holeNo] = Hole.EMPTY;
     }
-
 
     /**
      * Get the Rows

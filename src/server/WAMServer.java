@@ -2,7 +2,6 @@ package server;
 
 import common.WAMException;
 import common.WAMProtocol;
-
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -13,12 +12,16 @@ import java.net.Socket;
  * @author Mehul Sen
  */
 public class WAMServer implements WAMProtocol ,Runnable {
-
+    //The Server Socket for the Game
     private ServerSocket server;
-    private int rows;
-    private int columns;
-    private int players;
-    private int gameDuration;
+    //Number of ROWS
+    private final int ROWS;
+    //Number of COLUMNS
+    private final int COLUMNS;
+    //Number of Players
+    private final int PLAYERS;
+    //Duration of the Game
+    private final int GAME_DURATION;
 
     /**
      * Constructor for this Class
@@ -33,10 +36,10 @@ public class WAMServer implements WAMProtocol ,Runnable {
                      int gameDuration) throws WAMException {
         try {
             server = new ServerSocket(port);
-            this.columns = columns;
-            this.players = players;
-            this.rows = rows;
-            this.gameDuration = gameDuration;
+            this.COLUMNS = columns;
+            this.PLAYERS = players;
+            this.ROWS = rows;
+            this.GAME_DURATION = gameDuration;
         } catch (IOException e) {
             throw new WAMException(e);
         }
@@ -48,7 +51,6 @@ public class WAMServer implements WAMProtocol ,Runnable {
      * @throws WAMException Exception the Game might cause.
      */
     public static void main(String[] args) throws WAMException {
-
         if (args.length != 5) {
             System.out.println("Usage: java WAMServer <port> <row> <column> <players> <Game Duration Seconds>");
             System.exit(1);
@@ -69,21 +71,19 @@ public class WAMServer implements WAMProtocol ,Runnable {
     @Override
     public void run() {
         try {
-            WAMPlayer[] playerArray = new WAMPlayer[players];
-            for(int playerNo = 0; playerNo < players; playerNo++){
+            WAMPlayer[] playerArray = new WAMPlayer[PLAYERS];
+            for(int playerNo = 0; playerNo < PLAYERS; playerNo++){
                 System.out.println("Waiting for player " + (playerNo+1) + ".." +
                         ". ");
                 Socket socket = server.accept();
                 WAMPlayer play = new WAMPlayer(socket);
                 playerArray[playerNo] = play;
-                play.welcome(rows,columns,players,playerNo);
+                play.welcome(ROWS,COLUMNS,PLAYERS,playerNo);
                 System.out.println("Player " + (playerNo+1) + " is " +
                         "Connected!");
             }
             System.out.println("Starting game!");
-            WAMGame game = new WAMGame(rows, columns, playerArray,
-                    gameDuration);
-            // server is not multithreaded
+            WAMGame game = new WAMGame(ROWS, COLUMNS, playerArray,GAME_DURATION);
             new Thread(game).run();
         } catch (IOException e) {
             System.err.println("Something has gone horribly wrong!");

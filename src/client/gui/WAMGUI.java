@@ -29,20 +29,16 @@ import java.util.List;
 public class WAMGUI extends Application implements Observer<WAMBoard> {
     // The client that will will connect to the server.
     private WAMClient client;
-
     // The instance of the game board that the users will see.
     private WAMBoard board;
-
     // All of the holes that are displayed on the GUI
     private GridPane holes;
-
+    //VBOX that holds the Scores for the Player
     private VBox scores;
-
+    //The status of the Game
     private Label gameStatus;
-
     // The BorderPane that will hold all the GUI parts
     private BorderPane window;
-
     // The scene for the GUI (Used for quick lookup of the holes)
     private Scene scene;
 
@@ -86,6 +82,10 @@ public class WAMGUI extends Application implements Observer<WAMBoard> {
         }
     }
 
+    /**
+     * Sends the WHACK message to the Server.
+     * @param pane Pane at which the WHACK Message is sent.
+     */
     private void sendHit(StackPane pane){
         if (board.getStatus() == WAMBoard.Status.RUNNING) {
             int holeNo = Integer.parseInt(pane.getId());
@@ -93,6 +93,9 @@ public class WAMGUI extends Application implements Observer<WAMBoard> {
         }
     }
 
+    /**
+     * Gets the Scores for the Players and updates it for the GUI
+     */
     private void createScores(){
         scores = new VBox();
         for (int i = 0; i < board.getScores().length; i++){
@@ -115,7 +118,6 @@ public class WAMGUI extends Application implements Observer<WAMBoard> {
     @Override
     public void start(Stage stage) throws Exception {
         createHoles();
-
         createScores();
 
         gameStatus = new Label();
@@ -160,7 +162,6 @@ public class WAMGUI extends Application implements Observer<WAMBoard> {
         for (int i = 0; i < board.getScores().length; i++){
             ((Text) ((HBox) scores.getChildren().get(i)).getChildren().get(1)).setText(Integer.toString(board.getScores()[i]));
         }
-
         if (board.getStatus() == WAMBoard.Status.I_WON){
             gameStatus.setText("You Won.");
         } else if(board.getStatus() == WAMBoard.Status.I_LOST){
