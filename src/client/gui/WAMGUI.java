@@ -65,7 +65,7 @@ public class WAMGUI extends Application implements Observer<WAMBoard> {
      * Creates the StackPanes that hold the images of the moles and holes and
      * adds each one the the gridPane.
      */
-    public void createHoles(){
+    private void createHoles(){
         this.holes = new GridPane();
         this.holes.setHgap(10);
         this.holes.setVgap(10);
@@ -86,20 +86,24 @@ public class WAMGUI extends Application implements Observer<WAMBoard> {
         }
     }
 
-    public void sendHit(StackPane pane){
+    private void sendHit(StackPane pane){
         if (board.getStatus() == WAMBoard.Status.RUNNING) {
             int holeNo = Integer.parseInt(pane.getId());
             this.client.sendWHACK(holeNo);
         }
     }
 
-    public void createScores(){
+    private void createScores(){
         scores = new VBox();
-        for (int score: board.getScores()){
+        for (int i = 0; i < board.getScores().length; i++){
+            HBox scoreLine = new HBox();
             Text displayScore = new Text();
-            displayScore.setText("Player #" + (board.getPlayerNo()+1) + ": " + score);
+            Label displayPlayer = new Label("Player #" + (i+1) + ": ");
+            displayPlayer.setFont(Font.font(30));
+            displayScore.setText(Integer.toString(board.getScores()[i]));
             displayScore.setFont(Font.font(30));
-            scores.getChildren().add(displayScore);
+            scoreLine.getChildren().addAll(displayPlayer, displayScore);
+            scores.getChildren().add(scoreLine);
         }
     }
 
@@ -123,7 +127,7 @@ public class WAMGUI extends Application implements Observer<WAMBoard> {
         window.setCenter(holes);
         window.setRight(scores);
         window.setBottom(gameStatus);
-        BorderPane.setAlignment(gameStatus, Pos.BASELINE_CENTER);
+        BorderPane.setAlignment(gameStatus, Pos.BOTTOM_CENTER);
         BorderPane.setMargin(scores, insets);
 
         scene = new Scene(window);
@@ -154,7 +158,7 @@ public class WAMGUI extends Application implements Observer<WAMBoard> {
         // TODO change this to better form with only the score part getting
         //  changed each time
         for (int i = 0; i < board.getScores().length; i++){
-            ((Text) scores.getChildren().get(i)).setText("Player #" + board.getPlayerNo() + ": " + board.getScores()[i]);
+            ((Text) ((HBox) scores.getChildren().get(i)).getChildren().get(1)).setText(Integer.toString(board.getScores()[i]));
         }
 
         if (board.getStatus() == WAMBoard.Status.I_WON){
