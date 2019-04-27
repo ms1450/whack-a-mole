@@ -15,26 +15,27 @@ import java.net.Socket;
 public class WAMServer implements WAMProtocol ,Runnable {
 
     private ServerSocket server;
-    private int row;
-    private int column;
+    private int rows;
+    private int columns;
     private int players;
     private int gameDuration;
 
     /**
      * Constructor for this Class
      * @param port Port number to connect with Client on
-     * @param row Rows of the Board
-     * @param column Columns of the Board
+     * @param rows Rows of the Board
+     * @param columns Columns of the Board
      * @param players Number of Players playing the Game
      * @param gameDuration The duration for which the game should run.
      * @throws WAMException Any Exception Caused by the Game
      */
-    public WAMServer(int port, int row, int column, int players, int gameDuration) throws WAMException {
+    public WAMServer(int port, int rows, int columns, int players,
+                     int gameDuration) throws WAMException {
         try {
             server = new ServerSocket(port);
-            this.column = column;
+            this.columns = columns;
             this.players = players;
-            this.row = row;
+            this.rows = rows;
             this.gameDuration = gameDuration;
         } catch (IOException e) {
             throw new WAMException(e);
@@ -73,11 +74,12 @@ public class WAMServer implements WAMProtocol ,Runnable {
                 Socket socket = server.accept();
                     WAMPlayer play = new WAMPlayer(socket);
                     playerArray[playerNo] = play;
-                    play.welcome(row,column,players,playerNo);
+                    play.welcome(rows,columns,players,playerNo);
                     System.out.println("Player "+playerNo+1+" is Connected!");
             }
             System.out.println("Starting game!");
-            WAMGame game = new WAMGame(row, column, playerArray, gameDuration*1000);
+            WAMGame game = new WAMGame(rows, columns, playerArray,
+                    gameDuration);
             // server is not multithreaded
             new Thread(game).run();
         } catch (IOException e) {
