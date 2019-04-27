@@ -7,10 +7,13 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
  * This class represents a Player in the Game.
+ * @author Mehul Sen
+ * @author Dade Wood
  */
 public class WAMPlayer implements WAMProtocol, Closeable {
     //Socket belonging to the Client
@@ -55,21 +58,6 @@ public class WAMPlayer implements WAMProtocol, Closeable {
     }
 
     /**
-     * Method that returns 0 if no whacks and the hole number +1 if whacked.
-     * @return
-     */
-//    public int whack(){
-//        String response = scanner.nextLine();
-//        String[] args = response.trim().split(" ");
-//        if(args[0].equals(WHACK)){
-//            return Integer.parseInt(args[1])+1;
-//        }
-//        else{
-//            return 0;
-//        }
-//    }
-
-    /**
      * Method that sends out the welcome message to the Client
      * @param row Number of rows
      * @param column Number of Columns
@@ -101,14 +89,23 @@ public class WAMPlayer implements WAMProtocol, Closeable {
      * Sends the Scores to the Client
      * @param scores array of scores
      */
-    public void scores(int[] scores){
-        this.score = scores[playerNo];
+    public void scores(ArrayList<WAMPlayer> scores){
+        this.score = scores.get(playerNo).getScore();
         String s = "";
-        for(int i:scores){
-            s = s + " " + i;
+        for(WAMPlayer player:scores){
+            s = s + " " + player.getScore();
         }
         printer.println(SCORE + " " + s);
     }
+
+    /**
+     * Returns the Score of the Player
+     * @return score of the Player
+     */
+    public int getScore(){
+        return score;
+    }
+//TODO implement the Whack message to be recieved from the Player and update the score
 
 //    public int whack() throws WAMException {
 //        String response = scanner.nextLine();

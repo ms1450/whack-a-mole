@@ -1,11 +1,19 @@
 package server;
 
+import java.util.ArrayList;
+
 /**
- * The actual class where the Game runs.
+ * The actual implementation of the Game.
+ * This controls the Mole Up and Down movement as well as calculates any scores.
+ * @author Mehul Sen
+ * @author Dade Wood
  */
 public class WAMGame implements Runnable{
+    //Array of Players
     private WAMPlayer[] players;
+    //Wam Board
     private WAM wam;
+    //Duration the Game will last for
     private int gameDuration;
 
     /**
@@ -28,13 +36,12 @@ public class WAMGame implements Runnable{
      * @return Hole Number
      */
     public int getHoleNumFromRowAndCol(int row, int col){
-        int rowTotal = wam.getRow();
         int colTotal = wam.getColumn();
         int rowCounter = 0;
         int colCounter = 0;
         int counter = 0;
         while(rowCounter < row){
-            counter += colTotal + 1;
+            counter += colTotal ;
             rowCounter ++;
         }
         while(colCounter < col){
@@ -45,7 +52,7 @@ public class WAMGame implements Runnable{
     }
 
     /**
-     * Used to inform players if a Mole is Up or Down
+     * Used to inform players if a Mole is Up or Down as well as update the Board
      * @param state true if mole is up and false if mole is down
      * @param row row number
      * @param col column number
@@ -65,21 +72,64 @@ public class WAMGame implements Runnable{
         }
     }
 
+    /**
+     * the Up time for a Mole
+     * @return Random Up Time
+     */
     public long getRandomUptime(){
         return wam.getRandomUpTime();
     }
 
+    /**
+     * the Down time for a Mole
+     * @return Random Mole Time
+     */
     public long getRandomDowntime(){
         return wam.getRandomDownTime();
     }
 
     /**
-     * closes the Game
+     * Calculates the Scores and picks the winners and losers
+     * @return Array of winners and losers
+     */
+    public ArrayList<WAMPlayer>[] scoreWinner(){
+        ArrayList<WAMPlayer> winners = new ArrayList<>();
+        ArrayList<WAMPlayer> losers = new ArrayList<>();
+        int highestScore = 0;
+        for(WAMPlayer player: players){
+            if(highestScore < player.getScore()){
+                highestScore = player.getScore();
+            }
+        }
+        for (WAMPlayer player: players){
+            if(highestScore == player.getScore()){
+                winners.add(player);
+            }
+            else{
+                losers.add(player);
+            }
+        }
+        return new ArrayList[]{winners,losers};
+    }
+
+    /**
+     * closes the Game, sends win, lose and tie messages.
      */
     public void closeAll(){
-        for(WAMPlayer player: players){
-            //TODO calculate the Scores and send players messages.
-            player.gameTied();
+        ArrayList<WAMPlayer> winners = scoreWinner()[0];
+        if(winners.size() > 1){
+            for(WAMPlayer player: players){
+                player.gameTied();
+                player.close();
+            }
+        }
+        else{
+            winners.get(0).gameWon();
+            winners.get(0).close();
+        }
+        ArrayList<WAMPlayer> losers = scoreWinner()[1];
+        for(WAMPlayer player: losers) {
+            player.gameLost();
             player.close();
         }
     }
@@ -121,29 +171,36 @@ public class WAMGame implements Runnable{
 
 
     /**
-     * Thread run Method
+     * Thread run Method that runs the Moles.
      */
     @Override
     public void run() {
         Thread[][] threads = new Thread[wam.getRow()][wam.getColumn()];
-        long endTime = System.currentTimeMillis() + gameDuration;
+
+        //Creates the Threads for all the Moles
         for (int i = 0; i < wam.getRow(); i++) {
-                for (int j = 0; j < wam.getColumn(); j++) {
-                    threads[i][j] = new Thread(new Mole(i,j,this));
-                }
-            }
-        for(Thread[] thr:threads) for(Thread thread: thr){
-            thread.start();
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            for (int j = 0; j < wam.getColumn(); j++) {
+                long endTime = System.currentTimeMillis() + gameDuration;
+                threads[i][j] = new Thread(new Mole(i, j, this, endTime));
             }
         }
+        //Starts those moles in a gap of 1 second to avoid overcrowding.
+        //TODO Fix the Timings (Shouldnt be a Major issue , Works as is.)
+        for (int i = 0; i < wam.getRow(); i++) {
+            for (int j = 0; j < wam.getColumn(); j++) {
 
-        //whackCheck();
-        //TODO Figure out how to pop up multiple Moles at the Same time
+                threads[i][j].start();
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                   e.printStackTrace();
+                }
+            }
+        }
         System.out.println("Game Over");
-        //closeAll();
-     }
+        //TODO Figure out a Way to Read Whack messages and update the score for each player.
+        closeAll();
+    }
+
 }
+
