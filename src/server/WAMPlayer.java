@@ -105,7 +105,19 @@ public class WAMPlayer implements WAMProtocol, Closeable {
     public int getScore(){
         return score;
     }
-//TODO implement the Whack message to be recieved from the Player and update the score
+
+    public boolean hasWhack() throws WAMException{
+        return scanner.hasNext();
+    }
+    //TODO Hole Numbers are messeed UP
+    public int whack() throws WAMException{
+        String response = scanner.nextLine();
+        String[] tokens = response.trim().split(" ");
+        if(Integer.parseInt(tokens[2]) == playerNo){
+            return Integer.parseInt(tokens[1]);
+        }
+        else throw new WAMException(("Invalid Player Response"));
+    }
 
 //    public int whack() throws WAMException {
 //        String response = scanner.nextLine();
