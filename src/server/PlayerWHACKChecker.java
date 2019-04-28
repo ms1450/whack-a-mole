@@ -14,7 +14,7 @@ public class PlayerWHACKChecker extends Thread {
     //Instance of the Game
     private WAMGame game;
     //Duration till which this game should run.
-    private long duration;
+    private long gameDuration;
 
     /**
      * This constructor initializes the Thread Class.
@@ -26,7 +26,7 @@ public class PlayerWHACKChecker extends Thread {
     public PlayerWHACKChecker(WAMPlayer player, WAM wam, long duration, WAMGame game){
         this.player = player;
         this.wam = wam;
-        this.duration = duration;
+        this.gameDuration = duration;
         this.game = game;
     }
 
@@ -43,7 +43,7 @@ public class PlayerWHACKChecker extends Thread {
      * This is the method that checks if a player hits a mole and updates the scores accordingly.
      */
     public void run(){
-        long end = System.currentTimeMillis() + duration;
+        long end = System.currentTimeMillis() + gameDuration;
         while (System.currentTimeMillis() < end){
             try {
                 if(player.hasWhack()){

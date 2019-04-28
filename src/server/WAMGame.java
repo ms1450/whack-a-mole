@@ -6,8 +6,8 @@ import java.util.Arrays;
 /**
  * The actual implementation of the Game.
  * This controls the Mole Up and Down movement as well as calculates any scores.
- * @author Dade Wood
  * @author Mehul Sen
+ * @author Dade Wood
  */
 public class WAMGame implements Runnable{
     //Array of Players
@@ -121,7 +121,7 @@ public class WAMGame implements Runnable{
     }
 
     /**
-     * Thread run Method that runs the Moles.
+     * Thread run Method that runs the Moles and Players.
      */
     @Override
     public void run() {

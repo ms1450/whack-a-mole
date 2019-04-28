@@ -5,8 +5,8 @@ import java.util.Random;
 /**
  * This will act as the instance of the board.
  * It will be run by the WAMGame class.
- * @author Dade Wood
  * @author Mehul Sen
+ * @author Dade Wood
  */
 public class WAM {
     //The board with its rows and columns
@@ -100,6 +100,7 @@ public class WAM {
      */
     public int getRandomDownTime(){
         Random r = new Random();
+        System.out.println((r.nextInt(9) + 2)*1000);
         return (r.nextInt(9) + 2)*1000;
     }
 

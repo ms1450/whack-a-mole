@@ -11,8 +11,8 @@ import java.util.Scanner;
 
 /**
  * This class represents a Player in the Game.
- * @author Dade Wood
  * @author Mehul Sen
+ * @author Dade Wood
  */
 public class WAMPlayer implements WAMProtocol, Closeable {
     //Socket belonging to the Client

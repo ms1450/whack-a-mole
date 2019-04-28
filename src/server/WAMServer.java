@@ -8,8 +8,8 @@ import java.net.Socket;
 
 /**
  * This is the Server of WAM
- * @author Dade Wood
  * @author Mehul Sen
+ * @author Dade Wood
  */
 public class WAMServer implements WAMProtocol ,Runnable {
     //The Server Socket for the Game
@@ -84,7 +84,7 @@ public class WAMServer implements WAMProtocol ,Runnable {
             }
             System.out.println("Starting game!");
             WAMGame game = new WAMGame(ROWS, COLUMNS, playerArray,GAME_DURATION);
-            new Thread(game).run();
+            new Thread(game).start();
         } catch (IOException e) {
             System.err.println("Something has gone horribly wrong!");
             e.printStackTrace();

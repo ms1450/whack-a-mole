@@ -34,9 +34,8 @@ public class WAMGUI extends Application implements Observer<WAMBoard> {
     private WAMBoard board;
     // All of the holes that are displayed on the GUI
     private GridPane holes;
-
+    // The board for the GUI that will be displayed to the user
     private StackPane guiBoard;
-
     //VBOX that holds the Scores for the Player
     private VBox scores;
     //The status of the Game
@@ -75,6 +74,7 @@ public class WAMGUI extends Application implements Observer<WAMBoard> {
                         ".png").toExternalForm());
                 ImageView mole = new ImageView(getClass().getResource("mole" +
                         ".png").toExternalForm());
+                
                 StackPane pane = new StackPane();
                 pane.setId(Integer.toString(i + j*board.getColumns()));
                 pane.getChildren().addAll(hole, mole);
@@ -121,31 +121,39 @@ public class WAMGUI extends Application implements Observer<WAMBoard> {
      */
     @Override
     public void start(Stage stage) throws Exception {
+        // Creates the holes and scores for the GUI
         createHoles();
         createScores();
 
+        // Creates the Label for the game status
         gameStatus = new Label();
         gameStatus.setFont(Font.font(10*board.getColumns() + 10*board.getRows()));
         gameStatus.setTextFill(Color.WHITE);
 
+        // Sets the background to the game
         ImageView grass = new ImageView(getClass().getResource("grass" +
                 ".jpg").toExternalForm());
         grass.setFitWidth(140*board.getColumns());
         grass.setFitHeight(140*board.getRows());
 
+        // For when the game is over, darkens the game behind the status
+        // being displayed
         Rectangle darkenGame = new Rectangle(140*board.getColumns(),
                 140*board.getRows());
         darkenGame.setFill(Color.BLACK);
         darkenGame.setOpacity(.7);
 
+        // Adds everything to the guiBoard
         guiBoard = new StackPane();
         guiBoard.getChildren().addAll(grass, holes, darkenGame, gameStatus);
         guiBoard.getChildren().get(2).setVisible(false);
 
+        // Adds everything to the gridPane that will be viewed
         window = new BorderPane();
         window.setCenter(guiBoard);
         window.setRight(scores);
 
+        // Adds margins around the holes and scores
         Insets scoreInset = new Insets(15);
         Insets holeInset = new Insets(10);
         BorderPane.setMargin(scores, scoreInset);
@@ -153,6 +161,8 @@ public class WAMGUI extends Application implements Observer<WAMBoard> {
 
         scene = new Scene(window);
 
+        // Starts the window with a title of which player it is and non
+        // resizable
         stage.setScene(scene);
         stage.setResizable(false);
         stage.setTitle("Whack-A-Mole Player #" + (board.getPlayerNo()+1));
@@ -162,12 +172,10 @@ public class WAMGUI extends Application implements Observer<WAMBoard> {
     }
 
     /**
-     * Refreshes the board of moles when something is changed and displays it
-     * to the users.
+     * Checks each hole for changes and then updates if it is occupied by a
+     * mole or not in the view.
      */
-    public void refresh() {
-        // TODO find way to only access the one piece updated instead of
-        //  checking each hole
+    private void updateHoles(){
         for (int i = 0; i < board.getRows()*board.getColumns(); i++){
             if (board.getContents(i) == WAMBoard.Hole.OCCUPIED){
                 ((StackPane) scene.lookup("#" + i)).getChildren().get(1).setVisible(true);
@@ -175,11 +183,21 @@ public class WAMGUI extends Application implements Observer<WAMBoard> {
                 ((StackPane) scene.lookup("#" + i)).getChildren().get(1).setVisible(false);
             }
         }
+    }
 
+    /**
+     * Changes the scores for the player to view.
+     */
+    private void updateScores(){
         for (int i = 0; i < board.getScores().length; i++){
             ((Text) ((HBox) scores.getChildren().get(i)).getChildren().get(1)).setText(Integer.toString(board.getScores()[i]));
         }
+    }
 
+    /**
+     * Changes the status and displays it for the player to view.
+     */
+    private void updateStatus(){
         if (board.getStatus() == WAMBoard.Status.I_WON){
             gameStatus.setText("You Won.");
             guiBoard.getChildren().get(2).setVisible(true);
@@ -193,7 +211,20 @@ public class WAMGUI extends Application implements Observer<WAMBoard> {
             gameStatus.setText("ERROR");
             guiBoard.getChildren().get(2).setVisible(true);
         }
+    }
 
+    /**
+     * Refreshes the board of moles when something is changed and displays it
+     * to the users.
+     */
+    private void refresh() {
+        // TODO find way to only access the one piece updated instead of
+        //  checking each hole
+        updateHoles();
+
+        updateScores();
+
+        updateStatus();
     }
 
     /**

@@ -2,8 +2,8 @@ package server;
 
 /**
  * Represents a Mole in The Board
- * @author Dade Wood
  * @author Mehul Sen
+ * @author Dade Wood
  */
 public class Mole extends Thread{
     //Hole Number for the Mole
