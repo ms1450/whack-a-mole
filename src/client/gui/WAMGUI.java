@@ -7,7 +7,10 @@ import client.WAMClient;
 import common.WAMException;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
@@ -80,6 +83,7 @@ public class WAMGUI extends Application implements Observer<WAMBoard> {
                 pane.getChildren().addAll(hole, mole);
                 pane.getChildren().get(1).setVisible(false);
                 this.holes.add(pane, i, j);
+                this.holes.setAlignment(Pos.CENTER);
 
                 pane.setOnMouseClicked(event -> this.sendHit(pane));
             }
@@ -154,7 +158,7 @@ public class WAMGUI extends Application implements Observer<WAMBoard> {
         window.setRight(scores);
 
         // Adds margins around the holes and scores
-        Insets scoreInset = new Insets(15);
+        Insets scoreInset = new Insets(10, 75, 10, 10);
         Insets holeInset = new Insets(10);
         BorderPane.setMargin(scores, scoreInset);
         StackPane.setMargin(holes, holeInset);

@@ -63,7 +63,7 @@ public class WAMGame implements Runnable{
      * @return Random Up Time
      */
     public long getRandomUptime(){
-        return wam.getRandomUpTime();
+        return (long)wam.getRandomUpTime();
     }
 
     /**
@@ -71,7 +71,7 @@ public class WAMGame implements Runnable{
      * @return Random Mole Time
      */
     public long getRandomDowntime(){
-        return wam.getRandomDownTime();
+        return (long)wam.getRandomDownTime();
     }
 
     /**
