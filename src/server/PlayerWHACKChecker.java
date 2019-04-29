@@ -44,7 +44,7 @@ public class PlayerWHACKChecker extends Thread {
      */
     public void run(){
         long end = System.currentTimeMillis() + gameDuration;
-        while (System.currentTimeMillis() < end){
+        while (System.currentTimeMillis() <= end){
             try {
                 if(player.hasWhack()){
                     int holeNo = player.whack();

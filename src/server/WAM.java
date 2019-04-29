@@ -1,7 +1,5 @@
 package server;
 
-import java.util.Random;
-
 /**
  * This will act as the instance of the board.
  * It will be run by the WAMGame class.

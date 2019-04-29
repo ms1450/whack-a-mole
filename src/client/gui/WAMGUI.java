@@ -7,10 +7,8 @@ import client.WAMClient;
 import common.WAMException;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
@@ -222,8 +220,6 @@ public class WAMGUI extends Application implements Observer<WAMBoard> {
      * to the users.
      */
     private void refresh() {
-        // TODO find way to only access the one piece updated instead of
-        //  checking each hole
         updateHoles();
 
         updateScores();

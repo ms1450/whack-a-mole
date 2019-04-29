@@ -81,7 +81,7 @@ public class WAMGame implements Runnable{
     public ArrayList<WAMPlayer>[] scoreWinner(){
         ArrayList<WAMPlayer> winners = new ArrayList<>();
         ArrayList<WAMPlayer> losers = new ArrayList<>();
-        int highestScore = 0;
+        int highestScore = players[0].getScore();
         for(WAMPlayer player: players){
             if(highestScore < player.getScore()){
                 highestScore = player.getScore();
